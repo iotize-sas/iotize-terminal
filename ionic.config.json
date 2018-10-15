@@ -1,0 +1,7 @@
+{
+  "name": "iotize-terminal",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
