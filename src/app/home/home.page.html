@@ -4,8 +4,26 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-    <app-ble-devices></app-ble-devices>
-  The world is your oyster.
-  <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs">docs</a> will be your guide.</p>
+<ion-content>
+  <ion-button *ngIf="!ble.isScanning" color="dark" (click)="ble.startScan()" expand="full">Start Scan</ion-button>
+  <ion-button *ngIf="ble.isScanning" color="dark" (click)="ble.stopScan()" expand="full">Stop Scan</ion-button>
+  <ion-list>
+      <ion-item *ngFor="let device of devices">
+        <!-- <div *ngIf="ble.selectedDevice != device.address; then connectBlock; else disconnectBlock">this is ignored</div> -->
+        <!-- <ng-template #connectBlock> -->
+          <ion-button *ngIf="ble.selectedDevice != device.address" expand="full" (click)="connect(device.address);">
+            {{device.name}} 
+          </ion-button>
+        <!-- </ng-template> -->
+        <!-- <ng-template #disconnectBlock> -->
+          <ion-button *ngIf="ble.selectedDevice == device.address" color="primary" expand="full" (click)="disconnect()">
+            {{device.name}}
+            <ion-icon name="checkmark-circle" item-right></ion-icon>
+          </ion-button>
+        <!-- </ng-template> -->
+      </ion-item>
+      <ion-item>
+        {{ble.selectedDevice}}
+      </ion-item>
+  </ion-list>
 </ion-content>

@@ -9,10 +9,9 @@ export class DeviceService {
 
   isReady = false;
   device: IoTizeDevice;
-  connectionPromise: Promise<void>;
+  connectionPromise = null;
 
-  constructor() { }
-
+  constructor() {}
 
   async init(protocol: ComProtocol) {
     this.isReady = false;
@@ -20,6 +19,7 @@ export class DeviceService {
       this.device = IoTizeDevice.create();
       console.log('device created');
       this.connectionPromise = this.connect(protocol);
+      console.log('waiting for connection promise');
       await this.connectionPromise;
       this.isReady = true;
     } catch (error) {
@@ -35,5 +35,14 @@ export class DeviceService {
 
   disconnect(): Promise<void> {
     return this.device.disconnect();
+  }
+
+  async getSerialNumber(): Promise<string> {
+    return (await this.device.service.device.getSerialNumber()).body();
+  }
+
+  clear() {
+    this.isReady = false;
+    this.device = null;
   }
 }

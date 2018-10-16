@@ -27,8 +27,16 @@ We also need the rxjs-compat dependency
 
     npm install rxjs-compat
 
+
+
 ## IoTize device service generation
 
 The IoTize device will be served across the application through a service, that we generate with the command:
 
     ionic generate service iotize/device
+
+This service will give us access to the device and its functionalities. But we need to connect 
+
+## Building Ionic app for ios
+
+If you are using XCode 9+, you might get a warning saying that the swift version used is 2.x, and that XCode 9+ can't build the app. You can change this by opening the iOS platform's xcodeproj file, access build settings (within the project file) and select "Swift 3" in the Swift Language Version selector.

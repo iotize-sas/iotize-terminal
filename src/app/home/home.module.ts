@@ -1,4 +1,3 @@
-import { BleDevicesComponent } from './../ble-devices/ble-devices.component';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -13,6 +12,6 @@ import { HomePage } from './home.page';
     FormsModule,
     RouterModule.forChild([{ path: '', component: HomePage }])
   ],
-  declarations: [HomePage, BleDevicesComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule {}
