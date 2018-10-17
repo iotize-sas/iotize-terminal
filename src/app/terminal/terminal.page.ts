@@ -9,6 +9,7 @@ import { TerminalService } from '../iotize/terminal.service';
 })
 export class TerminalPage {
 
-  constructor(public terminal: TerminalService) {}
+  constructor(public terminal: TerminalService,
+              public logger: LoggerService) {}
 
 }

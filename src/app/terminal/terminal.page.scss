@@ -1,1 +1,14 @@
 
+#log {
+    overflow-y: scroll;
+    display: block;
+    white-space: pre !important;
+}
+
+.error {
+    color: red;
+}
+
+.info {
+    color: blue;
+}
