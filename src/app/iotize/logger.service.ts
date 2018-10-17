@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
 
 export interface Logline {
   level: 'info' | 'error';
@@ -10,18 +11,26 @@ export interface Logline {
 })
 export class LoggerService {
 
-  logLines: Array<Logline> = [];
+  logLines$: Subject<Logline>;
 
-  constructor() { }
-
+  constructor() {
+    this.logLines$ = new Subject<Logline>();
+  }
+  
   log(level: 'info' | 'error', string: string) {
-    this.logLines.push({
+    this.logLines$.next({
       level: level,
       message: string
     });
   }
 
-  clear() {
-    this.logLines.splice(0);
+  getLogLinesObservable() {
+    return this.logLines$.asObservable();
   }
+  
+  // clear() {
+  //   this.logLines$.complete();
+  //   this.logLines$ = new Subject<Logline>();
+
+  // }
 }

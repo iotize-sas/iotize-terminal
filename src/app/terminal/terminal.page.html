@@ -6,7 +6,7 @@
 
 <ion-content>
   <div id="log">
-    <p *ngFor="let line of logger.logLines" [class]="line.level">{{line.message}}</p>
+    <p *ngFor="let line of logLines" [class]="line.level">{{line.message}}</p>
   </div>
 </ion-content>
 <ion-footer>
