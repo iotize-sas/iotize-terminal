@@ -15,97 +15,100 @@
     </ion-list-header>
     <ion-item>
       <ion-label>Data format</ion-label>
-      <ion-select [(ngModel)]="terminal.dataType">
+      <ion-select [(ngModel)]="settings.dataType">
         <ion-select-option value="ASCII">ASCII</ion-select-option>
         <ion-select-option value="HEX">HEX</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>End of line </ion-label>
-      <ion-select multiple="true" [(ngModel)]="terminal.endOfLine" placeholder="None">
+      <ion-select multiple="true" [(ngModel)]="settings.endOfLine" placeholder="None">
         <ion-select-option value="CR">CR</ion-select-option>
         <ion-select-option value="LF">LF</ion-select-option>
       </ion-select>
     </ion-item>
-  </ion-list> 
-  <ion-list-header>
-    <ion-label>
-      Communication settings
-    </ion-label>
-  </ion-list-header>
-  <ion-item>
-    <ion-label>Physical port</ion-label>
-    <ion-select [(ngModel)]="terminal.settings.physicalPort">
-      <ion-select-option value="NONE">NONE</ion-select-option>
-      <ion-select-option value="RS232">RS232</ion-select-option>
-      <ion-select-option value="RS485">RS485</ion-select-option>
-      <ion-select-option value="USB">USB</ion-select-option>
-      <ion-select-option value="UART">UART</ion-select-option>
-      <ion-select-option value="CAN">CAN</ion-select-option>
-      <ion-select-option value="TERMINAISON_ACTIVE">TERMINAISON_ACTIVE</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label>Timeout</ion-label>
-    <ion-input type="number" [(ngModel)]="terminal.settings.timeout" class="right-align"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Handshake</ion-label>
-    <ion-select [(ngModel)]="terminal.settings.handshake">
-      <ion-select-option value="NONE">NONE</ion-select-option>
-      <ion-select-option value="RTS">RTS</ion-select-option>
-      <ion-select-option value="CTS">CTS</ion-select-option>
-      <ion-select-option value="RTS_CTS">RTS_CTS</ion-select-option>
-      <ion-select-option value="DDTR_DSRTR">DDTR_DSRTR</ion-select-option>
-      <ion-select-option value="XON_XOFF">XON_XOFF</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label>Handshake delimiter</ion-label>
-    <ion-select [(ngModel)]="terminal.settings.handshakeDelimiter">
-      <ion-select-option value="NONE">NONE</ion-select-option>
-      <ion-select-option value="CR">CR</ion-select-option>
-      <ion-select-option value="LF">LF</ion-select-option>
-      <ion-select-option value="CRLF">CRLF</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label>Offset first register</ion-label>
-    <ion-select [(ngModel)]="terminal.ofs">
-      <ion-select-option value="0">O</ion-select-option>
-      <ion-select-option value="1">1</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label>
-      Baud rate
-    </ion-label>
-    <ion-select [(ngModel)]="terminal.settings.baudRate">
-      <ion-select-option *ngFor="let baud of terminal.BAUD_RATES" [value]="baud">{{baud}} bauds</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
+    <ion-list-header>
+      <ion-label>
+        Communication settings
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Physical port</ion-label>
+      <ion-select [(ngModel)]="settings.settings.physicalPort">
+        <ion-select-option value="NONE">NONE</ion-select-option>
+        <ion-select-option value="RS232">RS232</ion-select-option>
+        <ion-select-option value="RS485">RS485</ion-select-option>
+        <ion-select-option value="USB">USB</ion-select-option>
+        <ion-select-option value="UART">UART</ion-select-option>
+        <ion-select-option value="CAN">CAN</ion-select-option>
+        <ion-select-option value="TERMINAISON_ACTIVE">TERMINAISON_ACTIVE</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Timeout</ion-label>
+      <ion-input type="number" [(ngModel)]="settings.settings.timeout" class="right-align"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Handshake</ion-label>
+      <ion-select [(ngModel)]="settings.settings.handshake">
+        <ion-select-option value="NONE">NONE</ion-select-option>
+        <ion-select-option value="RTS">RTS</ion-select-option>
+        <ion-select-option value="CTS">CTS</ion-select-option>
+        <ion-select-option value="RTS_CTS">RTS_CTS</ion-select-option>
+        <ion-select-option value="DDTR_DSRTR">DDTR_DSRTR</ion-select-option>
+        <ion-select-option value="XON_XOFF">XON_XOFF</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Handshake delimiter</ion-label>
+      <ion-select [(ngModel)]="settings.settings.handshakeDelimiter">
+        <ion-select-option value="NONE">NONE</ion-select-option>
+        <ion-select-option value="CR">CR</ion-select-option>
+        <ion-select-option value="LF">LF</ion-select-option>
+        <ion-select-option value="CRLF">CRLF</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Offset first register</ion-label>
+      <ion-select [(ngModel)]="settings.ofs">
+        <ion-select-option value="0">O</ion-select-option>
+        <ion-select-option value="1">1</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Baud rate
+      </ion-label>
+      <ion-select [(ngModel)]="settings.settings.baudRate">
+        <ion-select-option *ngFor="let baud of settings.BAUD_RATES" [value]="baud">{{baud}} bauds</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
       <ion-label>Data bits</ion-label>
-      <ion-select [(ngModel)]="terminal.settings.dataBitsLength">
+      <ion-select [(ngModel)]="settings.settings.dataBitsLength">
         <ion-select-option [value]="7">7</ion-select-option>
         <ion-select-option [value]="8">8</ion-select-option>
         <ion-select-option [value]="9">9</ion-select-option>
       </ion-select>
     </ion-item>
-  <ion-item>
+    <ion-item>
       <ion-label>Bit parity</ion-label>
-      <ion-select [(ngModel)]="terminal.settings.parity">
+      <ion-select [(ngModel)]="settings.settings.parity">
         <ion-select-option value="EVEN">EVEN</ion-select-option>
         <ion-select-option value="ODD">ODD</ion-select-option>
         <ion-select-option value="NONE">NONE</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-        <ion-label>Offset first register</ion-label>
-        <ion-select [(ngModel)]="terminal.settings.stopBit">
-          <ion-select-option value="ONE">ONE</ion-select-option>
-          <ion-select-option value="ONE_AND_HALF">ONE_AND_HALF</ion-select-option>
-          <ion-select-option value="TWO">TWO</ion-select-option>
-        </ion-select>
-      </ion-item>
+      <ion-label>Offset first register</ion-label>
+      <ion-select [(ngModel)]="settings.settings.stopBit">
+        <ion-select-option value="ONE">ONE</ion-select-option>
+        <ion-select-option value="ONE_AND_HALF">ONE_AND_HALF</ion-select-option>
+        <ion-select-option value="TWO">TWO</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button (click)="changeSettings()">Apply</ion-button>
+    <ion-button (click)="readSettingsFromTap()">Read</ion-button>
+  </ion-list> 
+
 </ion-content>
