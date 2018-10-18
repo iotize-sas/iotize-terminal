@@ -22,7 +22,7 @@
     </ion-item>
     <ion-item>
       <ion-label>End of line </ion-label>
-      <ion-select multiple="true" [(ngModel)]="settings.endOfLine" placeholder="None">
+      <ion-select [disabled]="settings.dataType == 'HEX'" multiple="true" [(ngModel)]="settings.endOfLine" placeholder="None">
         <ion-select-option value="CR">CR</ion-select-option>
         <ion-select-option value="LF">LF</ion-select-option>
       </ion-select>
