@@ -27,14 +27,18 @@ export class HomePage implements OnInit, OnDestroy {
       console.error(error);
     });
   }
-  async connect(deviceAddress: string) {
-    await this.ble.onConnect(deviceAddress);
-    this.changeDetector.detectChanges();
+  connect(device: DiscoveredDeviceType) {
+    console.log(`connect to ${device.name}`);
+    this.ble.onConnect(device.address).then(() => {
+      this.changeDetector.detectChanges();
+    });
   }
 
-  async disconnect() {
-    await this.ble.disconnect();
-  }
+  disconnect() {
+    this.ble.disconnect().then(() => {
+      this.changeDetector.detectChanges();
+  });
+}
 
   ngOnDestroy(): void {
     this.devicesSubscription = null;

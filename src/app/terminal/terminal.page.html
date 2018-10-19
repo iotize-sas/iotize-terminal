@@ -1,14 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Terminal</ion-title>
+    <ion-title>Terminal</ion-title><ion-button color="light" (click)="clear()">Clear</ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div id="log">
+<ion-content class="log" [scrollY]="true">
+  TEST
     <p *ngFor="let line of logLines" [class]="line.level">{{line.message}}</p>
-  </div>
 </ion-content>
 <ion-footer>
-  <ion-input></ion-input>
+  <ion-item>
+    <ion-input type="text" placeholder="Data input" class="text-input" [(ngModel)]="data"></ion-input>
+    <ion-button slot="end" color="dark" (click)="send(data)"><ion-icon name="send"></ion-icon></ion-button>
+  </ion-item>
 </ion-footer>

@@ -1,8 +1,19 @@
 
-#log {
-    overflow-y: scroll;
+.log {
+    width: 100%;
+    height: 100%;
+    padding: 0rem 1rem;
     display: block;
     white-space: pre !important;
+    background-color: #2D3134 !important;
+}
+
+.log .inner-scroll {
+    background-color: #2D3134 !important;
+}
+
+.log p {
+    color: green;
 }
 
 .error {
@@ -10,5 +21,17 @@
 }
 
 .info {
-    color: blue;
+    color: lightgray;
+}
+
+.text-input {
+    color: white;
+}
+
+ion-footer {
+    background-color: #2D3134;
+    border-top: 1px solid lightgray;
+}
+ion-footer ion-button {
+    background-color: #2D3134;
 }

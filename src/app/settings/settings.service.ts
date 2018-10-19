@@ -1,3 +1,4 @@
+import { TerminalService } from './../iotize/terminal.service';
 import { DeviceService } from './../iotize/device/device.service';
 import { LoggerService } from './../iotize/logger.service';
 import { Injectable } from '@angular/core';
@@ -17,7 +18,8 @@ export class SettingsService {
   settings: UartSettings; // displayed settings
 
   constructor(public logger: LoggerService,
-    public deviceService: DeviceService) {
+    public deviceService: DeviceService,
+    public terminal: TerminalService) {
     this._settings = {
       physicalPort: 'USB',
       stopBit: 'ONE',
@@ -50,12 +52,20 @@ export class SettingsService {
 
   async setUARTSettings(): Promise<void> {
     try {
+      this.terminal.isReading = false;
+
+      console.log('>>>>>>> logging as admin');
+      await this.deviceService.device.login('admin', 'admin');
+      console.log('>>>>>>> disconnecting');
       await this.deviceService.device.service.target.postDisconnect();
 
+      console.log('>>>>>>> setUARTSettings');
       const response = await this.deviceService.device.service.target.setUARTSettings(this._settings);
 
       if (response.isSuccess()) {
+        console.log('>>>>>>> connecting');
         await this.deviceService.device.service.target.postConnect();
+        this.terminal.launchReadingTask();
         return;
       }
       throw new Error('setUARTSettings response failed');
@@ -79,23 +89,23 @@ export class SettingsService {
 
   async applyChanges() {
     // REAL IMPLEMENTATION
-    // try {
-    //   this._settings = Object.assign({}, this.settings);
-    //   await this.setUARTSettings();
-    // } catch (error) {
-    //   this.logger.log('error', error);
-    // }
+    try {
+      this._settings = Object.assign({}, this.settings);
+      await this.setUARTSettings();
+    } catch (error) {
+      this.logger.log('error', error);
+    }
 
     // MOCKED IMPLEMENTATION
-    console.log('mocked TerminalService.applyChanges');
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        this._settings = Object.assign({}, this.settings);
-        this.logger.log('info', 'resolved');
-        console.log('resolved');
-        resolve();
-      }, 2000);
-    });
+    // console.log('mocked TerminalService.applyChanges');
+    // return new Promise<void>((resolve) => {
+    //   setTimeout(() => {
+    //     this._settings = Object.assign({}, this.settings);
+    //     this.logger.log('info', 'resolved');
+    //     console.log('resolved');
+    //     resolve();
+    //   }, 2000);
+    // });
   }
 
   discardChanges() {

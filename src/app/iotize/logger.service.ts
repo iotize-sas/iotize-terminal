@@ -27,10 +27,4 @@ export class LoggerService {
   getLogLinesObservable() {
     return this.logLines$.asObservable();
   }
-  
-  // clear() {
-  //   this.logLines$.complete();
-  //   this.logLines$ = new Subject<Logline>();
-
-  // }
 }

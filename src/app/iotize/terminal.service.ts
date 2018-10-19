@@ -1,20 +1,91 @@
+import { FormatHelper } from '@iotize/device-client.js/core';
 import { SettingsService } from './../settings/settings.service';
 import { DeviceService } from './device/device.service';
 import { LoggerService } from './logger.service';
 import { Injectable } from '@angular/core';
+import { interval } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TerminalService {
 
+  isReading = false;
+  private refreshTime = 1000;
+
   constructor(public logger: LoggerService,
               public deviceService: DeviceService,
               public settings: SettingsService) {
               }
 
-  send(data: Uint8Array) {
-    this.deviceService.device.service.target.send(data);
-    throw new Error('Not implemented yet');
+  async send(data: Uint8Array) {
+    try {
+      const response = (await this.deviceService.device.service.target.send(data));
+      if (response.isSuccess()) {
+        if (response.body() === null) {
+          this.logger.log('info', 'sent');
+          return;
+        }
+        this.logger.log('info', response.body().toString());
+        return;
+      }
+      this.logger.log('error', 'response failed');
+    } catch (error) {
+      this.logger.log('error', error);
+    }
+  }
+  sendString(textToSend: string) {
+
+    let data: Uint8Array;
+    let suffix = '';
+
+    for (const end of this.settings.endOfLine) {
+      if (end === 'CR') {
+        suffix += '\r';
+      }
+      if (end === 'LF') {
+        suffix += '\n';
+      }
+    }
+    switch (this.settings.dataType) {
+      case 'HEX':
+      data = FormatHelper.hexStringToBuffer(textToSend);
+      break;
+      case 'ASCII':
+      data = FormatHelper.toByteBuffer(textToSend + suffix);
+      break;
+    }
+    console.log(`sending: ${textToSend + suffix}`);
+    this.send(data);
+    if (!this.isReading) {
+      this.launchReadingTask();
+    }
+  }
+
+  async read() {
+    try {
+      const response = (await this.deviceService.device.service.target.read());
+      if (response.isSuccess()) {
+        if (response.body() !== null) {
+          this.logger.log('info', response.body().toString());
+        }
+        return;
+      }
+      this.logger.log('error', 'response failed');
+    } catch (error) {
+      this.logger.log('error', error);
+    }
+  }
+
+  launchReadingTask() {
+    this.isReading = true;
+    const timer = interval(this.refreshTime);
+    const reading = timer.subscribe(() => {
+      if (this.isReading) {
+        this.read();
+        return;
+      }
+      reading.unsubscribe();
+    });
   }
 }
