@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content class="log" [scrollY]="true">
-  TEST
     <p *ngFor="let line of logLines" [class]="line.level">{{line.message}}</p>
 </ion-content>
 <ion-footer>

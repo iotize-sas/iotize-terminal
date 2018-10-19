@@ -1,4 +1,4 @@
-import { TerminalService } from './../iotize/terminal.service';
+import { interval } from 'rxjs';
 import { DeviceService } from './../iotize/device/device.service';
 import { LoggerService } from './../iotize/logger.service';
 import { Injectable } from '@angular/core';
@@ -18,8 +18,7 @@ export class SettingsService {
   settings: UartSettings; // displayed settings
 
   constructor(public logger: LoggerService,
-    public deviceService: DeviceService,
-    public terminal: TerminalService) {
+    public deviceService: DeviceService) {
     this._settings = {
       physicalPort: 'USB',
       stopBit: 'ONE',
@@ -52,23 +51,23 @@ export class SettingsService {
 
   async setUARTSettings(): Promise<void> {
     try {
-      this.terminal.isReading = false;
-
       console.log('>>>>>>> logging as admin');
-      await this.deviceService.device.login('admin', 'admin');
+      // await this.deviceService.device.login('admin', 'admin');
       console.log('>>>>>>> disconnecting');
       await this.deviceService.device.service.target.postDisconnect();
 
+      console.log('>>>>>>> waiting after disconnect');
+
       console.log('>>>>>>> setUARTSettings');
       const response = await this.deviceService.device.service.target.setUARTSettings(this._settings);
-
       if (response.isSuccess()) {
         console.log('>>>>>>> connecting');
         await this.deviceService.device.service.target.postConnect();
-        this.terminal.launchReadingTask();
         return;
+      } else {
+
+        throw new Error('setUARTSettings response failed');
       }
-      throw new Error('setUARTSettings response failed');
 
     } catch (error) {
       this.logger.log('error', error);
@@ -94,6 +93,7 @@ export class SettingsService {
       await this.setUARTSettings();
     } catch (error) {
       this.logger.log('error', error);
+      throw (error);
     }
 
     // MOCKED IMPLEMENTATION
