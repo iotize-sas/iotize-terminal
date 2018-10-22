@@ -57,9 +57,6 @@ export class TerminalService {
     }
     console.log(`sending: ${textToSend + suffix}`);
     this.send(data);
-    if (!this.isReading) {
-      this.launchReadingTask();
-    }
   }
 
   async read() {
@@ -79,12 +76,14 @@ export class TerminalService {
 
   launchReadingTask() {
     this.isReading = true;
+    console.log('creating reading task observable');
     const timer = interval(this.refreshTime);
     const reading = timer.subscribe(() => {
       if (this.isReading) {
         this.read();
         return;
       }
+      console.log('unsubscribing from reading task');
       reading.unsubscribe();
     });
   }
