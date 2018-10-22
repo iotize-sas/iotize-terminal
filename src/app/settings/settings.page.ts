@@ -10,7 +10,7 @@ import { TerminalService } from '../iotize/terminal.service';
 })
 export class SettingsPage {
 
-  loader: HTMLIonLoadingElement;
+  loader: any;
 
   constructor(public settings: SettingsService,
     public terminal: TerminalService,
@@ -46,11 +46,9 @@ export class SettingsPage {
   async applyChanges() {
     await this.loadingMessage('Applying new settings');
     try {
-      this.terminal.isReading = false;
       await this.settings.applyChanges();
       this.loader.dismiss();
       console.log('apply changes ended, launching reading task');
-      this.terminal.launchReadingTask();
     } catch (error) {
       this.loader.dismiss();
       console.error(error);
@@ -78,7 +76,6 @@ export class SettingsPage {
 
   async testSetUART() {
     try {
-      this.terminal.isReading = false;
       await this.settings.deviceService.device.service.target.postDisconnect();
       const confirm = await this.alertCtrl.create({
         header: 'Apply new settings',

@@ -87,4 +87,8 @@ export class TerminalService {
       reading.unsubscribe();
     });
   }
+
+  stopReadingTask() {
+    this.isReading = false;
+  }
 }
