@@ -49,9 +49,6 @@ export class SettingsService {
 
   async setUARTSettings(): Promise<void> {
     try {
-      console.log('>>>>>>> logging as admin');
-      // await this.deviceService.device.login('admin', 'admin');
-      console.log('>>>>>>> disconnecting');
       await this.deviceService.device.service.target.postDisconnect();
 
       console.log('>>>>>>> waiting after disconnect');

@@ -8,21 +8,20 @@
   <ion-button *ngIf="!ble.isScanning" color="dark" (click)="ble.startScan()" expand="full">Start Scan</ion-button>
   <ion-button *ngIf="ble.isScanning" color="dark" (click)="ble.stopScan()" expand="full">Stop Scan</ion-button>
   <ion-list>
-      <ion-item *ngFor="let device of devices">
-          <ion-button *ngIf="ble.selectedDevice != device.address" color="light" (click)="connect(device);">
-            {{device.name}} 
-          </ion-button>
-          <ion-button *ngIf="ble.selectedDevice == device.address" color="primary" (click)="disconnect();">
-            {{device.name}}
-            <ion-icon name="checkmark-circle" item-right></ion-icon>
-          </ion-button>
-      </ion-item>
-  </ion-list>
-</ion-content>
-<!-- 
-<ng-template #connect>
+    <ng-container *ngFor="let device of devices">
+      <div *ngIf="device.address != ble.selectedDevice; then connectBlock; else disconnectBlock">this is ignored</div>
+      <ng-template #connectBlock>
+        <ion-item button color="light" (click)="connect(device);" >
+          {{device.name}} 
+        </ion-item>
+      </ng-template>
+      <ng-template #disconnectBlock>
+        <ion-item color="primary" (click)="disconnect();">
+          {{device.name}}
+          <ion-icon name="checkmark-circle" item-right></ion-icon>
+        </ion-item>
+      </ng-template>
+    </ng-container>
+    </ion-list>
+  </ion-content>
   
-</ng-template>
-<ng-template #disconnect>
-
-</ng-template> -->
