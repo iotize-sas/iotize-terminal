@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Terminal</ion-title><ion-button color="light" (click)="clear()">Clear</ion-button>
+    <ion-title>Terminal</ion-title>
+    <ion-buttons slot="start">
+      <ion-button color="dark" (click)="clear()">Clear</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="dark" (click)="openSettingsModal()">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

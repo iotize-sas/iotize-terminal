@@ -22,6 +22,7 @@ export class LoggerService {
       level: level,
       message: string
     });
+    console.log(`[${level.toUpperCase()}] : ${string}`);
   }
 
   getLogLinesObservable() {

@@ -11,8 +11,6 @@ export class SettingsService {
 
   public BAUD_RATES: Array<number> = [300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,
     187500, 230400, 460800, 921600];
-  dataType: 'ASCII' | 'HEX' = 'ASCII';
-  endOfLine: Array<string> = [];
 
   _settings: UartSettings; // real settings
   settings: UartSettings; // displayed settings

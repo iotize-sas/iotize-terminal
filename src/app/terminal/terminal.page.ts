@@ -1,4 +1,5 @@
-import { Content } from '@ionic/angular';
+import { TerminalModalPage } from './terminal-modal/terminal-modal.page';
+import { Content, ModalController } from '@ionic/angular';
 import { LoggerService, Logline } from './../iotize/logger.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TerminalService } from '../iotize/terminal.service';
@@ -18,7 +19,8 @@ export class TerminalPage implements OnInit {
   logLines: Array<Logline> = [];
   constructor(public terminal: TerminalService,
     public logger: LoggerService,
-    public changeDetector: ChangeDetectorRef ) { }
+    public changeDetector: ChangeDetectorRef,
+    public modalController: ModalController) { }
 
   ngOnInit() {
     this.logger.getLogLinesObservable()
@@ -37,5 +39,13 @@ export class TerminalPage implements OnInit {
 
   clear() {
     this.logLines.splice(0);
+  }
+
+  async openSettingsModal() {
+    const modal = await this.modalController.create({
+      component: TerminalModalPage
+    });
+
+    return await modal.present();
   }
 }

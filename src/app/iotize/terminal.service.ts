@@ -12,6 +12,8 @@ export class TerminalService {
 
   isReading = false;
   private refreshTime = 1000;
+  dataType: 'ASCII' | 'HEX' = 'ASCII';
+  endOfLine: Array<string> = [];
 
   constructor(public logger: LoggerService,
               public deviceService: DeviceService,
@@ -26,8 +28,6 @@ export class TerminalService {
           this.logger.log('info', 'sent');
           return;
         }
-        this.logger.log('info', response.body().toString());
-        return;
       }
       this.logger.log('error', 'response failed');
     } catch (error) {
@@ -39,7 +39,7 @@ export class TerminalService {
     let data: Uint8Array;
     let suffix = '';
 
-    for (const end of this.settings.endOfLine) {
+    for (const end of this.endOfLine) {
       if (end === 'CR') {
         suffix += '\r';
       }
@@ -47,7 +47,7 @@ export class TerminalService {
         suffix += '\n';
       }
     }
-    switch (this.settings.dataType) {
+    switch (this.dataType) {
       case 'HEX':
       data = FormatHelper.hexStringToBuffer(textToSend);
       break;
@@ -64,8 +64,14 @@ export class TerminalService {
       const response = (await this.deviceService.device.service.target.read());
       if (response.isSuccess()) {
         if (response.body() !== null) {
-          this.logger.log('info', response.body().toString());
-        }
+          let responseString = '';
+          if (this.dataType === 'ASCII') {
+            responseString = FormatHelper.toAsciiString(response.body());
+          } else if (this.dataType === 'HEX') {
+            responseString = FormatHelper.toHexString(response.body());
+          }
+          this.logger.log('info', responseString);
+                }
         return;
       }
       this.logger.log('error', 'response failed');
