@@ -33,8 +33,14 @@ export class DeviceService {
     return this.device.connect(protocol);
   }
 
-  disconnect(): Promise<void> {
-    return this.device.disconnect();
+  async disconnect(): Promise<void> {
+    try {
+      this.isReady = false;
+      await this.device.disconnect();
+    } catch (error) {
+      console.log(error);
+      throw (error);
+    }
   }
 
   async getSerialNumber(): Promise<string> {
