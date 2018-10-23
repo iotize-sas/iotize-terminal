@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import { IoTizeBLEProtocol } from './bleProtocol';
 import { DeviceService } from './../device/device.service';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { BLEComProtocol } from '@iotize/cordova-plugin-iotize-ble';
 
 declare var iotizeBLE: any;
 
@@ -69,7 +69,7 @@ export class BleService {
   async connectTo(deviceAddress: string) {
     try {
       console.log('trying to connect to ' + deviceAddress);
-      await this.deviceService.init(new IoTizeBLEProtocol(deviceAddress));
+      await this.deviceService.init(new BLEComProtocol(deviceAddress));
       console.log('connected!');
       console.log('SN: ' + await this.deviceService.getSerialNumber());
       this.selectedDevice = deviceAddress;
@@ -103,6 +103,6 @@ export class BleService {
 
   async disconnect() {
     await this.deviceService.disconnect();
-    this.selectedDevice = "";
+    this.selectedDevice = '';
   }
 }
