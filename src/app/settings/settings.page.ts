@@ -1,6 +1,6 @@
 import { SettingsService } from './settings.service';
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { TerminalService } from '../iotize/terminal.service';
 
 @Component({
@@ -16,7 +16,8 @@ export class SettingsPage {
     public terminal: TerminalService,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    public changeDetector: ChangeDetectorRef) { }
+    public changeDetector: ChangeDetectorRef,
+    public toastController: ToastController) { }
 
   async changeSettings() {
     console.log('change settings');
@@ -51,8 +52,7 @@ export class SettingsPage {
       console.log('apply changes ended, launching reading task');
     } catch (error) {
       this.loader.dismiss();
-      console.error(error);
-      throw error;
+      this.showToast(error);
     }
   }
   async readSettingsFromTap() {
@@ -63,16 +63,36 @@ export class SettingsPage {
     } catch (error) {
       this.loader.dismiss();
       console.error(error);
+      await this.showToast(`ERROR : ${error}`);
     }
   }
 
   async loadingMessage(message: string) {
-    if (this.loader === undefined) {
-      this.loader = await this.loadingCtrl.create();
-    }
+
+    this.loader = await this.loadingCtrl.create();
     this.loader.message = message;
     this.loader.present();
   }
+
+  async showToast(message: string, duration: number = 3000) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: duration
+    });
+
+    toast.present();
+  }
+
+  async showClosingToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      showCloseButton: true,
+      position: 'top',
+    });
+
+    toast.present();
+  }
+
 
   async testSetUART() {
     try {
