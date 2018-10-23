@@ -1,3 +1,4 @@
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { BleService, DiscoveredDeviceType } from './../iotize/ble/ble.service';
 import { Subscription } from 'rxjs';
@@ -13,7 +14,9 @@ export class HomePage implements OnInit, OnDestroy {
   devices: Array<DiscoveredDeviceType> = [];
 
   constructor(public ble: BleService,
-              public changeDetector: ChangeDetectorRef) {}
+              public changeDetector: ChangeDetectorRef,
+              public loadingCtrl: LoadingController,
+              public toastCtrl: ToastController) {}
 
   ngOnInit(): void {
     this.devicesSubscription = this.ble.devicesObservable()
@@ -27,11 +30,19 @@ export class HomePage implements OnInit, OnDestroy {
       console.error(error);
     });
   }
-  connect(device: DiscoveredDeviceType) {
+  async connect(device: DiscoveredDeviceType) {
     console.log(`connect to ${device.name}`);
-    this.ble.onConnect(device.address).then(() => {
-      this.changeDetector.detectChanges();
+    const loader = await this.loadingCtrl.create({
+      message: 'connecting'
     });
+    loader.present();
+    try {
+      await this.ble.onConnect(device.address);
+      loader.dismiss();
+    } catch (error) {
+      loader.dismiss();
+    }
+    this.changeDetector.detectChanges();
   }
 
   disconnect() {
