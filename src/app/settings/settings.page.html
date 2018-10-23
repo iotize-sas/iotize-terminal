@@ -22,7 +22,7 @@
         <ion-select-option value="USB">USB</ion-select-option>
         <ion-select-option value="UART">UART</ion-select-option>
         <ion-select-option value="CAN">CAN</ion-select-option>
-        <ion-select-option value="TERMINAISON_ACTIVE">TERMINAISON_ACTIVE</ion-select-option>
+        <!-- <ion-select-option value="TERMINAISON_ACTIVE">TERMINAISON_ACTIVE</ion-select-option> -->
       </ion-select>
     </ion-item>
     <ion-item>
@@ -49,13 +49,13 @@
         <ion-select-option value="CRLF">CRLF</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>Offset first register</ion-label>
       <ion-select [(ngModel)]="settings.ofs">
         <ion-select-option value="0">O</ion-select-option>
         <ion-select-option value="1">1</ion-select-option>
       </ion-select>
-    </ion-item>
+    </ion-item> -->
     <ion-item>
       <ion-label>
         Baud rate
@@ -81,7 +81,7 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Offset first register</ion-label>
+      <ion-label>Stop bit</ion-label>
       <ion-select [(ngModel)]="settings.settings.stopBit">
         <ion-select-option value="ONE">ONE</ion-select-option>
         <ion-select-option value="ONE_AND_HALF">ONE_AND_HALF</ion-select-option>
