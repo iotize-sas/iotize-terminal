@@ -10,8 +10,6 @@ import { TerminalService } from '../iotize/terminal.service';
 })
 export class SettingsPage {
 
-  loader: any;
-
   constructor(public settings: SettingsService,
     public terminal: TerminalService,
     public alertCtrl: AlertController,
@@ -45,33 +43,28 @@ export class SettingsPage {
   }
 
   async applyChanges() {
-    await this.loadingMessage('Applying new settings');
+    const loader = await this.loadingCtrl.create( {message: 'Applying new settings'});
+    loader.present();
     try {
       await this.settings.applyChanges();
-      this.loader.dismiss();
+      loader.dismiss();
       console.log('apply changes ended, launching reading task');
     } catch (error) {
-      this.loader.dismiss();
+      loader.dismiss();
       this.showToast(error);
     }
   }
   async readSettingsFromTap() {
-    await this.loadingMessage('Reading settings from tap');
+    const loader = await this.loadingCtrl.create( {message: 'Reading settings from tap'});
+    loader.present();
     try {
       await this.settings.getUARTSettings();
-      this.loader.dismiss();
+      loader.dismiss();
     } catch (error) {
-      this.loader.dismiss();
+      loader.dismiss();
       console.error(error);
       await this.showToast(`ERROR : ${error}`);
     }
-  }
-
-  async loadingMessage(message: string) {
-    this.loader = null;
-    this.loader = await this.loadingCtrl.create();
-    this.loader.message = message;
-    this.loader.present();
   }
 
   async showToast(message: string, duration: number = 3000): Promise<void> {
@@ -91,7 +84,6 @@ export class SettingsPage {
 
     toast.present();
   }
-
 
   async testSetUART() {
     try {
@@ -225,10 +217,4 @@ export class SettingsPage {
       this.showClosingToast(`Logout error : ${error}`);
     }
   }
-  // Doesn't work with tabs?
-  // ionViewCanLeave(): Promise<boolean> {
-  //   console.log('ViewCanLeave?');
-  // return this.changeSettings();
-  // }
-
 }
