@@ -10,8 +10,9 @@ export class DeviceService {
   isReady = false;
   device: IoTizeDevice;
   connectionPromise = null;
+  connectedId = 0;
 
-  constructor() {}
+  constructor() { }
 
   async init(protocol: ComProtocol) {
     this.isReady = false;
@@ -21,6 +22,7 @@ export class DeviceService {
       this.connectionPromise = this.connect(protocol);
       console.log('waiting for connection promise');
       await this.connectionPromise;
+      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
       this.isReady = true;
     } catch (error) {
       console.error('init failed');
@@ -50,5 +52,25 @@ export class DeviceService {
   clear() {
     this.isReady = false;
     this.device = null;
+  }
+
+  async login(username: string, password: string): Promise<boolean> {
+    try {
+      const logSuccess = await this.device.login(username, password);
+      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      return logSuccess;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async logout(): Promise<boolean> {
+    try {
+      const logoutSuccess = await this.device.logout();
+      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      return logoutSuccess;
+    } catch (error) {
+      throw error;
+    }
   }
 }

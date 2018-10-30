@@ -3,6 +3,16 @@
     <ion-title>
       Settings
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="terminal.deviceService.connectedId === 0" color="dark" (click)="openLoginAlert()">
+        <ion-icon slot="end" name="log-in"></ion-icon>
+        Login
+      </ion-button>
+      <ion-button *ngIf="terminal.deviceService.connectedId !== 0" color="dark" (click)="openLogoutAlert()">
+          <ion-icon slot="end" name="log-out"></ion-icon>
+        Logout
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -88,8 +98,14 @@
         <ion-select-option value="TWO">TWO</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-button (click)="changeSettings()">Apply</ion-button>
-    <ion-button (click)="readSettingsFromTap()">Read</ion-button>
-  </ion-list> 
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="changeSettings()">Apply settings</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="readSettingsFromTap()">Read from tap</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-list>
 
 </ion-content>
