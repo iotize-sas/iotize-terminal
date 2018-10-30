@@ -1,5 +1,5 @@
-import { Observable, of, Subject } from 'rxjs';
-import { Injectable, ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 export interface Logline {
   level: 'info' | 'error';
@@ -16,13 +16,13 @@ export class LoggerService {
   constructor() {
     this.logLines$ = new Subject<Logline>();
   }
-  
+
   log(level: 'info' | 'error', string: string) {
     this.logLines$.next({
       level: level,
       message: string
     });
-    console.log(`[${level.toUpperCase()}] : ${string}`);
+    console[level](`[${level.toUpperCase()}] : ${string}`);
   }
 
   getLogLinesObservable() {
