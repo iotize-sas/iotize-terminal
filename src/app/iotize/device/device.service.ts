@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IoTizeDevice } from '@iotize/device-client.js/device';
 import { ComProtocol } from '@iotize/device-client.js/protocol/api';
+import { SettingsService } from '../../settings/settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class DeviceService {
   connectionPromise = null;
   connectedId = 0;
 
-  constructor() { }
+  constructor(public settings: SettingsService) { }
 
   async init(protocol: ComProtocol) {
     this.isReady = false;
@@ -23,6 +24,7 @@ export class DeviceService {
       console.log('waiting for connection promise');
       await this.connectionPromise;
       this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      this.settings.getUARTSettings();
       this.isReady = true;
     } catch (error) {
       console.error('init failed');
