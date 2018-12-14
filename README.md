@@ -5,13 +5,24 @@ iotize-terminal is a simple demonstration App showing how to use Iotize Device A
 This sample is based on a tabs based Ionic 4 App. 
 [Ionic tutorial](https://ionicframework.com/docs/intro/installation/)
 
+## Installation of this example
+
+In order to try this example application, you need to perform these steps:
+
+    git clone https://github.com/iotize-sas/iotize-terminal.ionic.git
+    cd iotize-terminal.ionic
+    npm i -g ionic
+    npm i
+    ionic cordova run <platform>
+
+The following sections explains some of the steps encountered during this application development 
 
 ## Installation of IoTize Device API
 
-IoTize Device API and the cordova plugin, using npm and ionic CLI
+IoTize Device API and the cordova plugin, using npm and ionic CLI (or cordova one)
 
     npm install @iotize/device-client.js --save
-    ionic cordova plugin add @iotize/cordova-plugin-iotize-ble
+    ionic cordova plugin add @iotize/cordova-plugin-iotize-ble // or cordova plugin add @iotize/cordova-plugin-iotize-ble on cordova only projects
 
 ## IoTize Device service generation
 
