@@ -13,7 +13,8 @@ export class DeviceService {
   connectionPromise = null;
   connectedId = 0;
 
-  constructor(public settings: SettingsService) { }
+  constructor() { }
+  // constructor(public settings: SettingsService) { }
 
   async init(protocol: ComProtocol) {
     this.isReady = false;
@@ -24,7 +25,7 @@ export class DeviceService {
       console.log('waiting for connection promise');
       await this.connectionPromise;
       this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
-      this.settings.getUARTSettings();
+      // this.settings.getUARTSettings();
       this.isReady = true;
     } catch (error) {
       console.error('init failed');
