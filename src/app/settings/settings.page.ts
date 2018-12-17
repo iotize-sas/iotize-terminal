@@ -145,9 +145,10 @@ export class SettingsPage {
         },
         {
           text: 'Ok',
-          handler: (data) => {
+          handler: async (data) => {
             alert.dismiss();
-            this.login(data.username, data.password);
+            await this.login(data.username, data.password);
+            this.changeDetector.detectChanges();
           }
         }
       ]

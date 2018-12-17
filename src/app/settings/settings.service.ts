@@ -1,8 +1,8 @@
-import { interval } from 'rxjs';
 import { DeviceService } from './../iotize/device/device.service';
 import { LoggerService } from './../iotize/logger.service';
 import { Injectable } from '@angular/core';
 import { UartSettings } from '@iotize/device-client.js/device/model';
+import { Events } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,8 @@ export class SettingsService {
   settings: UartSettings; // displayed settings
 
   constructor(public logger: LoggerService,
-    public deviceService: DeviceService) {
+    public deviceService: DeviceService,
+    public events: Events) {
     this._settings = {
       physicalPort: 'USB',
       stopBit: 'ONE',
@@ -29,6 +30,7 @@ export class SettingsService {
       ofs: 0
     };
     this.settings = Object.assign({}, this._settings);
+    this.eventSubscribe();
   }
 
   async getUARTSettings(): Promise<void> {
@@ -115,5 +117,9 @@ export class SettingsService {
       }
     }
     return false;
+  }
+
+  eventSubscribe() {
+    this.events.subscribe('connected', () => this.getUARTSettings());
   }
 }

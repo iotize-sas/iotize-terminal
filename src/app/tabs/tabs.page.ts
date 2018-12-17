@@ -1,6 +1,6 @@
 import { TerminalService } from './../iotize/terminal.service';
-import { Component, ViewChild } from '@angular/core';
-import { Tabs } from '@ionic/angular';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Tabs, Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -9,7 +9,10 @@ import { Tabs } from '@ionic/angular';
 })
 export class TabsPage {
 
-  constructor(public terminal: TerminalService) {
+  constructor(public terminal: TerminalService,
+    public events: Events,
+    public changeDetector: ChangeDetectorRef) {
+      this.events.subscribe('connected', () => this.changeDetector.detectChanges());
   }
   @ViewChild(Tabs) tabs: Tabs;
 
