@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-button *ngIf="!ble.isScanning" color="dark" (click)="ble.startScan()" expand="full">Start Scan</ion-button>
+  <ion-button *ngIf="!ble.isScanning" color="dark" (click)="startScan()" expand="full">Start Scan</ion-button>
   <ion-button *ngIf="ble.isScanning" color="dark" (click)="ble.stopScan()" expand="full">Stop Scan</ion-button>
   <ion-list>
     <ng-container *ngFor="let device of devices">

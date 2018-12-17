@@ -102,7 +102,11 @@ export class BleService {
   }
 
   async disconnect() {
-    await this.deviceService.disconnect();
+    try {
+      await this.deviceService.disconnect();
+    } catch(error) {
+      console.error(error);
+    }
     this.selectedDevice = '';
   }
 }

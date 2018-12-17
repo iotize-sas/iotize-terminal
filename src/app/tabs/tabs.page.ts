@@ -13,6 +13,7 @@ export class TabsPage {
     public events: Events,
     public changeDetector: ChangeDetectorRef) {
       this.events.subscribe('connected', () => this.changeDetector.detectChanges());
+      this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
   }
   @ViewChild(Tabs) tabs: Tabs;
 

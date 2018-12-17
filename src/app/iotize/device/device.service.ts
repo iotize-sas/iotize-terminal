@@ -33,17 +33,19 @@ export class DeviceService {
       throw new Error('Connection Failed');
     }
   }
-
+  
   connect(protocol: ComProtocol): Promise<void> {
     return this.device.connect(protocol);
   }
-
+  
   async disconnect(): Promise<void> {
     try {
       this.isReady = false;
       await this.device.disconnect();
+      this.events.publish('disconnected');
     } catch (error) {
       console.log(error);
+      this.events.publish('disconnected');
       throw (error);
     }
   }
