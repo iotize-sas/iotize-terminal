@@ -24,6 +24,9 @@ export class HomePage implements OnInit, OnDestroy {
     .subscribe((device) => {
       if (this.devices.map((entry) => entry.address).indexOf(device.address) >= 0) {
         return;
+      } else {
+        console.log('device.address:', device.address, 'not found in devices');
+        console.log(this.devices);
       }
       this.devices.push(device);
       this.changeDetector.detectChanges();
