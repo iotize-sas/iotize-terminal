@@ -21,7 +21,7 @@ export class BleService {
   isScanning = false;
   devices$: Subject<DiscoveredDeviceType>;
 
-  constructor(public deviceService: DeviceService) { 
+  constructor(public deviceService: DeviceService) {
     this.devices$ = new Subject<DiscoveredDeviceType>();
   }
 
@@ -104,7 +104,7 @@ export class BleService {
   async disconnect() {
     try {
       await this.deviceService.disconnect();
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
     this.selectedDevice = '';

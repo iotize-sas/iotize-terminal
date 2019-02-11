@@ -70,7 +70,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   startScan() {
-    this.devices.splice(0);
+    this.devices.filter(device => device.address === this.ble.selectedDevice);
     this.ble.startScan();
   }
 }

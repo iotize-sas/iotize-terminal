@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.iotize.terminal" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>iotize-terminal</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -83,7 +83,7 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-add-swift-support" spec="^1.7.2" />
-    <plugin name="cordova-plugin-iotize-ble" spec="@iotize/cordova-plugin-iotize-ble@~1.1.0-alpha.16" />
+    <plugin name="cordova-plugin-iotize-ble" spec="@iotize/cordova-plugin-iotize-ble@~1.1.0-alpha.17" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.2" />
 </widget>
