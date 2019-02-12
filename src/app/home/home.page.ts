@@ -34,6 +34,7 @@ export class HomePage implements OnInit, OnDestroy {
       console.error(error);
     });
     this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
+    this.events.subscribe('needChangeDetection', () => this.changeDetector.detectChanges());
   }
   async connect(device: DiscoveredDeviceType) {
     console.log(`connect to ${device.name}`);
@@ -69,8 +70,12 @@ export class HomePage implements OnInit, OnDestroy {
     this.devicesSubscription = null;
   }
 
-  startScan() {
-    this.devices.filter(device => device.address === this.ble.selectedDevice);
+  toggleScan() {
+    if (this.ble.isScanning) {
+      this.ble.stopScan();
+      return;
+    }
+    this.devices = this.devices.filter(device => device.address === this.ble.selectedDevice);
     this.ble.startScan();
   }
 }

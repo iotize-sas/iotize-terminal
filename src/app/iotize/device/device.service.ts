@@ -12,6 +12,8 @@ export class DeviceService {
   device: IoTizeDevice;
   connectionPromise = null;
   connectedId = 0;
+  username = '';
+  password = '';
 
   constructor(public events: Events) { }
   // constructor(public settings: SettingsService) { }
@@ -33,11 +35,11 @@ export class DeviceService {
       throw new Error('Connection Failed');
     }
   }
-  
+
   connect(protocol: ComProtocol): Promise<void> {
     return this.device.connect(protocol);
   }
-  
+
   async disconnect(): Promise<void> {
     try {
       this.isReady = false;
@@ -59,9 +61,9 @@ export class DeviceService {
     this.device = null;
   }
 
-  async login(username: string, password: string): Promise<boolean> {
+  async login(): Promise<boolean> {
     try {
-      const logSuccess = await this.device.login(username, password);
+      const logSuccess = await this.device.login(this.username, this.password);
       this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
       return logSuccess;
     } catch (error) {
@@ -71,11 +73,15 @@ export class DeviceService {
 
   async logout(): Promise<boolean> {
     try {
-      const logoutSuccess = await this.device.logout();
-      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
-      return logoutSuccess;
+      await this.device.logout();
     } catch (error) {
-      throw error;
+      return false;
+    }
+    try {
+      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 }

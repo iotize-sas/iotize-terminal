@@ -61,7 +61,7 @@ export class TerminalService {
 
   async read() {
     try {
-      const response = (await this.deviceService.device.service.target.read());
+      const response = (await this.deviceService.device.service.target.readBytes());
       if (response.isSuccess()) {
         if (response.body() !== null) {
           let responseString = '';

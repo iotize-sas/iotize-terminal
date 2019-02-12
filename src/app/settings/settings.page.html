@@ -9,7 +9,7 @@
         Login
       </ion-button>
       <ion-button *ngIf="terminal.deviceService.connectedId !== 0" color="dark" (click)="openLogoutAlert()">
-          <ion-icon slot="end" name="log-out"></ion-icon>
+        <ion-icon slot="end" name="log-out"></ion-icon>
         Logout
       </ion-button>
     </ion-buttons>
@@ -25,14 +25,9 @@
     </ion-list-header>
     <ion-item>
       <ion-label>Physical port</ion-label>
-      <ion-select [(ngModel)]="settings.settings.physicalPort">
-        <ion-select-option value="NONE">NONE</ion-select-option>
-        <ion-select-option value="RS232">RS232</ion-select-option>
-        <ion-select-option value="RS485">RS485</ion-select-option>
-        <ion-select-option value="USB">USB</ion-select-option>
-        <ion-select-option value="UART">UART</ion-select-option>
-        <ion-select-option value="CAN">CAN</ion-select-option>
-        <!-- <ion-select-option value="TERMINAISON_ACTIVE">TERMINAISON_ACTIVE</ion-select-option> -->
+      <ion-select [(ngModel)]="settings.physicalPort">
+        <ion-select-option *ngFor="let option of UartSettings.PhysicalPort | enum" [(value)]="option.index">
+          {{option.value}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -41,29 +36,23 @@
     </ion-item>
     <ion-item>
       <ion-label>Handshake</ion-label>
-      <ion-select [(ngModel)]="settings.settings.handshake">
-        <ion-select-option value="NONE">NONE</ion-select-option>
-        <ion-select-option value="RTS">RTS</ion-select-option>
-        <ion-select-option value="CTS">CTS</ion-select-option>
-        <ion-select-option value="RTS_CTS">RTS_CTS</ion-select-option>
-        <ion-select-option value="DDTR_DSRTR">DDTR_DSRTR</ion-select-option>
-        <ion-select-option value="XON_XOFF">XON_XOFF</ion-select-option>
+      <ion-select [(ngModel)]="settings.handshakeValue">
+        <ion-select-option *ngFor="let option of UartSettings.Handshake | enum" [(value)]="option.index">{{option.value}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Handshake delimiter</ion-label>
-      <ion-select [(ngModel)]="settings.settings.handshakeDelimiter">
-        <ion-select-option value="NONE">NONE</ion-select-option>
-        <ion-select-option value="CR">CR</ion-select-option>
-        <ion-select-option value="LF">LF</ion-select-option>
-        <ion-select-option value="CRLF">CRLF</ion-select-option>
+      <ion-select [(ngModel)]="settings.handshakeDelimiter">
+        <ion-select-option *ngFor="let option of UartSettings.HandshakeDelimiter | enum" [(value)]="option.index">
+          {{option.value}}</ion-select-option>
       </ion-select>
     </ion-item>
     <!-- <ion-item>
       <ion-label>Offset first register</ion-label>
       <ion-select [(ngModel)]="settings.ofs">
-        <ion-select-option value="0">O</ion-select-option>
-        <ion-select-option value="1">1</ion-select-option>
+        <ion-select-option value="false">False</ion-select-option>
+        <ion-select-option value="true">True</ion-select-option>
       </ion-select>
     </ion-item> -->
     <ion-item>
@@ -76,26 +65,23 @@
     </ion-item>
     <ion-item>
       <ion-label>Data bits</ion-label>
-      <ion-select [(ngModel)]="settings.settings.dataBitsLength">
-        <!-- <ion-select-option [value]="7">7</ion-select-option> -->
-        <ion-select-option [value]="8">8</ion-select-option>
-        <ion-select-option [value]="9">9</ion-select-option>
+      <ion-select [(ngModel)]="settings.dataBitsLength">
+        <ion-select-option *ngFor="let option of UartSettings.DataBitsLength | enum" [(value)]="option.index">
+          {{option.value | trim:'_'}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Bit parity</ion-label>
-      <ion-select [(ngModel)]="settings.settings.parity">
-        <ion-select-option value="EVEN">EVEN</ion-select-option>
-        <ion-select-option value="ODD">ODD</ion-select-option>
-        <ion-select-option value="NONE">NONE</ion-select-option>
+      <ion-select [(ngModel)]="settings.bitParity">
+        <ion-select-option *ngFor="let option of UartSettings.BitParity | enum" [(value)]="option.index">{{option.value}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Stop bit</ion-label>
-      <ion-select [(ngModel)]="settings.settings.stopBit">
-        <ion-select-option value="ONE">ONE</ion-select-option>
-        <ion-select-option value="ONE_AND_HALF">ONE_AND_HALF</ion-select-option>
-        <ion-select-option value="TWO">TWO</ion-select-option>
+      <ion-select [(ngModel)]="settings.stopBit">
+        <ion-select-option *ngFor="let option of UartSettings.StopBit | enum" [(value)]="option.index">{{option.value}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-toolbar>

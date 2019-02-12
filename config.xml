@@ -86,4 +86,5 @@
     <plugin name="cordova-plugin-iotize-ble" spec="@iotize/cordova-plugin-iotize-ble@~1.1.0-alpha.17" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.2" />
+    <engine name="windows" spec="6.0.1" />
 </widget>

@@ -2,6 +2,7 @@ import { SettingsService } from './settings.service';
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { TerminalService } from '../iotize/terminal.service';
+import { UartSettings } from '@iotize/device-client.js/device/model';
 
 @Component({
   selector: 'app-settings',
@@ -16,6 +17,10 @@ export class SettingsPage {
     public loadingCtrl: LoadingController,
     public changeDetector: ChangeDetectorRef,
     public toastController: ToastController) { }
+
+  get UartSettings() {
+    return UartSettings;
+  }
 
   async changeSettings() {
     console.log('change settings');
@@ -87,7 +92,7 @@ export class SettingsPage {
 
   async testSetUART() {
     try {
-      await this.settings.deviceService.device.service.target.postDisconnect();
+      await this.settings.deviceService.device.service.target.disconnect();
       const confirm = await this.alertCtrl.create({
         header: 'Apply new settings',
         message: 'Are you sure?',
@@ -106,7 +111,7 @@ export class SettingsPage {
               console.log('apply changes ended, launching reading task');
               if (response.isSuccess()) {
                 console.log('>>>>>>> connecting');
-                await this.settings.deviceService.device.service.target.postConnect();
+                await this.settings.deviceService.device.service.target.connect();
                 return;
               } else {
                 throw new Error('setUARTSettings response failed');
@@ -129,12 +134,14 @@ export class SettingsPage {
         {
           name: 'username',
           type: 'text',
-          placeholder: 'Username'
+          placeholder: 'Username',
+          value: this.settings.deviceService.username
         },
         {
           name: 'password',
           type: 'password',
-          placeholder: 'Password'
+          placeholder: 'Password',
+          value: this.settings.deviceService.password
         }
       ],
       buttons: [
@@ -147,7 +154,7 @@ export class SettingsPage {
           text: 'Ok',
           handler: async (data) => {
             alert.dismiss();
-            await this.login(data.username, data.password);
+            await this.login();
             this.changeDetector.detectChanges();
           }
         }
@@ -156,15 +163,15 @@ export class SettingsPage {
     alert.present();
   }
 
-  async login(username: string, password: string) {
+  async login() {
     const loader = await this.loadingCtrl.create({ message: 'Logging in' });
     loader.present();
 
     try {
-      const logSuccess = await this.terminal.deviceService.login(username, password);
+      const logSuccess = await this.terminal.deviceService.login();
       loader.dismiss();
       if (logSuccess) {
-        this.showToast(`Logged in as ${username}`);
+        this.showToast(`Logged in as ${this.settings.deviceService.username}`);
       } else {
         this.showToast(`Wrong username or password`);
       }
