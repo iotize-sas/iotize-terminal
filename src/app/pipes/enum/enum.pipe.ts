@@ -13,8 +13,6 @@ export class EnumPipe implements PipeTransform {
   transform(enumObject: Object): Array<EnumIndexValue> {
     let keys = Object.keys(enumObject);
     keys = keys.slice(keys.length / 2);
-    console.log(keys);
-    console.log(enumObject);
     return keys.map((key) => {
       return {
         index: enumObject[key].toString(),
