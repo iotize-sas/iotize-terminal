@@ -154,6 +154,8 @@ export class SettingsPage {
           text: 'Ok',
           handler: async (data) => {
             alert.dismiss();
+            this.settings.deviceService.username = data['username'];
+            this.settings.deviceService.password = data['password'];
             await this.login();
             this.changeDetector.detectChanges();
           }

@@ -63,6 +63,7 @@ export class DeviceService {
 
   async login(): Promise<boolean> {
     try {
+      console.log('trying to log as ', this.username);
       const logSuccess = await this.device.login(this.username, this.password);
       this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
       return logSuccess;
