@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.iotize.terminal" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>iotize-terminal</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+<widget id="com.iotize.modbus" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>iotize-modbus</name>
+    <description>Modbus client for Iotized devices</description>
+    <author email="dev@iotize.com" href="https://www.iotize.com/">IoTize Solutions</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

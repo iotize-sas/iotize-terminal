@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SettingsPage } from './settings.page';
 import { PipeModule } from '../pipes/pipes.modules';
+import { LoginModule } from '../login/login.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { PipeModule } from '../pipes/pipes.modules';
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: SettingsPage }]),
-    PipeModule
+    PipeModule,
+    LoginModule
   ],
   declarations: [SettingsPage]
 })

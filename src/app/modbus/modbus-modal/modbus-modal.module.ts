@@ -5,12 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TerminalModalPage } from './terminal-modal.page';
+import { ModbusModalPage } from './modbus-modal.page';
+import { PipeModule } from '../../pipes/pipes.modules';
 
 const routes: Routes = [
   {
     path: '',
-    component: TerminalModalPage
+    component: ModbusModalPage
   }
 ];
 
@@ -19,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    PipeModule
   ],
-  declarations: [TerminalModalPage]
+  declarations: [ModbusModalPage]
 })
-export class TerminalModalPageModule {}
+export class ModbusModalPageModule {}

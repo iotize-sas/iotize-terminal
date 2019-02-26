@@ -1,5 +1,5 @@
 {
-  "name": "iotize-terminal",
+  "name": "iotize-modbus",
   "integrations": {
     "cordova": {}
   },

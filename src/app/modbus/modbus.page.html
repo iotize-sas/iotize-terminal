@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Modbus</ion-title>
+    <ion-buttons slot="end">
+      <app-login [displayText]="false"></app-login>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="data-table" [scrollY]="true">
+  <!-- <p>Last retrieved values</p> -->
+  <!-- <ion-grid>
+    <ion-row>
+      <ion-col size="4">Address</ion-col>
+      <ion-col size="8">Value</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let dataLine of lastModbusRead | modbusData">
+      <ion-col size="4">0x{{dataLine.key}}</ion-col>
+      <ion-col size="8">0x{{(dataLine.value).toString(16)}}</ion-col>
+    </ion-row>
+  </ion-grid> -->
+  <app-scroll-table keyName="key"
+                    valueName="value"
+                    keyAlias="Address"
+                    valueAlias="Value"
+                    [dataArray]="lastModbusRead | modbusData"
+                    [formatFn]="toHexStringFn()"
+                    ></app-scroll-table>
+</ion-content>
+<ion-footer>
+  <ion-grid class="clickable" (click)="openSettingsModal()" class="smaller-text">
+    <ion-row class="no-overflow">
+      <ion-col size="2" class="smaller-text">
+        Slave:
+      </ion-col>
+      <ion-col size="4" class="right-align">
+        {{terminal.modbusOptions.slave}}
+      </ion-col>
+      <ion-col size="2" class="smaller-text"> Address:</ion-col>
+      <ion-col size="4" class="right-align">{{terminal.modbusOptions.address}}</ion-col>
+    </ion-row>
+    <ion-row class="no-overflow">
+      <ion-col size="2" class="smaller-text">ObjectType:</ion-col>
+      <ion-col size="4" class="right-align">{{terminal.modbusOptions.objectTypeString}}</ion-col>
+      <ion-col size="2" class="smaller-text">Format:</ion-col>
+      <ion-col size="4" class="right-align">{{terminal.modbusOptions.formatString | trim: '_'}}</ion-col>
+    </ion-row>
+    <ion-row class="no-overflow">
+      <ion-col size="3" class="smaller-text">Data length:</ion-col>
+      <ion-col size="3" class="right-align">{{terminal.modbusOptions.length}}</ion-col>
+      <ion-col size="3" class="smaller-text">Display as:</ion-col>
+      <ion-col size="3" class="right-align">HEX</ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item>
+    <ion-input type="text" placeholder="Data input" class="text-input" [(ngModel)]="data" (keyup.enter)="send(data)">
+    </ion-input>
+  </ion-item>
+  <ion-item>  
+    <ion-grid class="com-buttons">
+      <ion-row>
+        <ion-col size="6">
+          <ion-button color="dark" expand="block" (click)="send(data)">
+            SEND
+            <ion-icon name="send"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button color="dark" expand="block" (click)="mockedModbusRead()">
+            READ
+            <ion-icon name="search"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-footer>

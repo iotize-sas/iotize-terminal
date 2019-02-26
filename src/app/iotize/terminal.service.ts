@@ -3,7 +3,35 @@ import { SettingsService } from './../settings/settings.service';
 import { DeviceService } from './device/device.service';
 import { LoggerService } from './logger.service';
 import { Injectable } from '@angular/core';
-import { interval } from 'rxjs';
+import { ModbusOptions, VariableFormat } from '@iotize/device-client.js/device/model';
+
+export interface ModbusReadAnswer {
+  firstAddress: number;
+  dataArray: Uint8Array;
+  format: VariableFormat;
+}
+
+export class ModbusTerminalOptions implements ModbusOptions {
+  constructor(options: ModbusOptions) {
+    this.address = options.address;
+    this.slave = options.slave;
+    this.format = options.format;
+    this.length = options.length;
+    this.objectType = options.objectType;
+  }
+  address;
+  slave;
+  format;
+  length;
+  objectType;
+
+  get objectTypeString(): string {
+    return ModbusOptions.ObjectType[this.objectType];
+  }
+  get formatString(): string {
+    return VariableFormat[this.format];
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +42,14 @@ export class TerminalService {
   private refreshTime = 1000;
   dataType: 'ASCII' | 'HEX' = 'ASCII';
   endOfLine: Array<string> = [];
+
+  modbusOptions = new ModbusTerminalOptions ({
+    address: 0,
+    slave: 1,
+    format: VariableFormat._16_BITS,
+    length: 1,
+    objectType: ModbusOptions.ObjectType.DEFAULT
+  });
 
   constructor(public logger: LoggerService,
               public deviceService: DeviceService,
@@ -80,21 +116,43 @@ export class TerminalService {
     }
   }
 
-  launchReadingTask() {
-    this.isReading = true;
-    console.log('creating reading task observable');
-    const timer = interval(this.refreshTime);
-    const reading = timer.subscribe(() => {
-      if (this.isReading) {
-        this.read();
-        return;
-      }
-      console.log('unsubscribing from reading task');
-      reading.unsubscribe();
-    });
+  // launchReadingTask() {
+  //   this.isReading = true;
+  //   console.log('creating reading task observable');
+  //   const timer = interval(this.refreshTime);
+  //   const reading = timer.subscribe(() => {
+  //     if (this.isReading) {
+  //       this.read();
+  //       return;
+  //     }
+  //     console.log('unsubscribing from reading task');
+  //     reading.unsubscribe();
+  //   });
+  // }
+
+  // stopReadingTask() {
+  //   this.isReading = false;
+  // }
+
+  async modBusRead(): Promise<ModbusReadAnswer> {
+    const response = await this.deviceService.device.service.target.modbusRead(this.modbusOptions);
+    if (!response.isSuccessful()) {
+      throw response.codeRet();
+    }
+    return {
+      dataArray: response.body(),
+      firstAddress: this.modbusOptions.address,
+      format: this.modbusOptions.format
+    };
   }
 
-  stopReadingTask() {
-    this.isReading = false;
+  async modBusWrite(values: Uint8Array, options: ModbusOptions): Promise<void> {
+    const response = await this.deviceService.device.service.target.modbusWrite({
+      options: options,
+      data: values
+    });
+    if (!response.isSuccessful()) {
+      throw response.codeRet();
+    }
   }
 }

@@ -1,21 +1,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TerminalPage } from './terminal.page';
+import { ModbusPage } from './modbus.page';
 
 describe('TerminalPage', () => {
-  let component: TerminalPage;
-  let fixture: ComponentFixture<TerminalPage>;
+  let component: ModbusPage;
+  let fixture: ComponentFixture<ModbusPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TerminalPage],
+      declarations: [ModbusPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TerminalPage);
+    fixture = TestBed.createComponent(ModbusPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

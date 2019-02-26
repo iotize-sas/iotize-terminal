@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { TabsPage } from './tabs.page';
 import { HomePage } from '../home/home.page';
-import { TerminalPage } from '../terminal/terminal.page';
+import { ModbusPage } from '../modbus/modbus.page';
 import { SettingsPage } from '../settings/settings.page';
 
 const routes: Routes = [
@@ -22,9 +22,9 @@ const routes: Routes = [
         component: HomePage
       },
       {
-        path: 'terminal',
-        outlet: 'terminal',
-        component: TerminalPage
+        path: 'modbus',
+        outlet: 'modbus',
+        component: ModbusPage
       },
       {
         path: 'settings',
