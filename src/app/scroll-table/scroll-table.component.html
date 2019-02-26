@@ -1,0 +1,10 @@
+<ion-grid>
+    <ion-row class="grid-header">
+      <ion-col size="4">{{keyAlias? keyAlias : 'key'}}</ion-col>
+      <ion-col size="8">{{valueAlias? valueAlias : 'value'}}</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let dataLine of dataArray" class="grid-body">
+      <ion-col size="4">0x{{dataLine[keyName]}}</ion-col>
+      <ion-col size="8">{{formatFn? formatFn(dataLine[valueName]) : dataLine[valueName]}}</ion-col>
+    </ion-row>
+  </ion-grid>

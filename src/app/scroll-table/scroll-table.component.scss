@@ -1,0 +1,15 @@
+ion-grid {
+    text-align: center;
+}
+
+ion-row.grid-header {
+    font-weight: bold;
+}
+
+ion-row.grid-body {
+    border-bottom: 1px solid gray;
+}
+
+ion-row.grid-body:nth-child(odd) {
+    background-color: #f0f0f0;
+}
