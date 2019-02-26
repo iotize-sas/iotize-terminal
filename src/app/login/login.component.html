@@ -1,0 +1,8 @@
+<ion-button *ngIf="deviceService.connectedId === 0" (click)="openLoginAlert()">
+  <ion-icon slot="end" name="log-in"></ion-icon>
+  {{displayText? 'Login': ''}}
+</ion-button>
+<ion-button *ngIf="deviceService.connectedId !== 0" (click)="openLogoutAlert()">
+  <ion-icon slot="end" name="log-out"></ion-icon>
+  {{displayText? 'Logout': ''}}
+</ion-button>
