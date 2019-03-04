@@ -13,3 +13,12 @@ ion-row.grid-body {
 ion-row.grid-body:nth-child(odd) {
     background-color: #f0f0f0;
 }
+
+ion-row.sticky-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--ion-background-color, #fff);
+    }

@@ -13,6 +13,7 @@ export class ScrollTableComponent implements OnInit {
   @Input() valueAlias?: string;
   @Input() dataArray: any[];
   @Input() formatFn?: (data) => string;
+  @Input() columnSize?: {key: number; value: number};
 
   constructor() { }
 
