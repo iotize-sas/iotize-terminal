@@ -21,10 +21,11 @@
   </ion-grid> -->
   <app-scroll-table keyName="key"
                     valueName="value"
-                    keyAlias="Address"
+                    keyAlias="Register#"
                     valueAlias="Value"
                     [dataArray]="lastModbusRead | modbusData"
-                    [formatFn]="toHexStringFn()"
+                    [formatFn]="formatToStringFactory()"
+                    [columnSize]="{key: 4, value: 8}"
                     ></app-scroll-table>
 </ion-content>
 <ion-footer>
@@ -53,14 +54,14 @@
     </ion-row>
   </ion-grid>
   <ion-item>
-    <ion-input type="text" placeholder="Data input" class="text-input" [(ngModel)]="data" (keyup.enter)="send(data)">
+    <ion-input type="text" [placeholder]="canSend()? 'Data input' : 'Read only'" class="text-input" [disabled]="!canSend()" [(ngModel)]="data" (keyup.enter)="send(data)">
     </ion-input>
   </ion-item>
   <ion-item>  
     <ion-grid class="com-buttons">
       <ion-row>
         <ion-col size="6">
-          <ion-button color="dark" expand="block" (click)="send(data)">
+          <ion-button color="dark" expand="block" [disabled]="!canSend()" (click)="send(data)">
             SEND
             <ion-icon name="send"></ion-icon>
           </ion-button>

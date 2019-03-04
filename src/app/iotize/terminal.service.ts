@@ -9,6 +9,7 @@ export interface ModbusReadAnswer {
   firstAddress: number;
   dataArray: Uint8Array;
   format: VariableFormat;
+  objectType: ModbusOptions.ObjectType;
 }
 
 export class ModbusTerminalOptions implements ModbusOptions {
@@ -135,14 +136,17 @@ export class TerminalService {
   // }
 
   async modBusRead(): Promise<ModbusReadAnswer> {
+    const firstAddress = this.modbusOptions.address, format = this.modbusOptions.format, objectType = this.modbusOptions.objectType;
+
     const response = await this.deviceService.device.service.target.modbusRead(this.modbusOptions);
     if (!response.isSuccessful()) {
       throw response.codeRet();
     }
     return {
       dataArray: response.body(),
-      firstAddress: this.modbusOptions.address,
-      format: this.modbusOptions.format
+      firstAddress: firstAddress,
+      format: format,
+      objectType: objectType
     };
   }
 

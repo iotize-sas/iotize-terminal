@@ -12,12 +12,12 @@
   <ion-list>
     <ion-item>
       <ion-label>Slave</ion-label>
-      <ion-input type="number" [(ngModel)]="slave" class="right-align">
+      <ion-input type="number" min="0" [(ngModel)]="slave" class="right-align">
         </ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Address</ion-label>
-          <ion-input type="number" [(ngModel)]="address" class="right-align">
+          <ion-input type="number" min="0" [(ngModel)]="address" class="right-align">
             </ion-input>
     </ion-item>
     <ion-item>
@@ -26,12 +26,12 @@
         <ion-select-option *ngFor="let option of ModbusOptions.ObjectType | enum" [(value)]="option.index">{{option.value}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>Format</ion-label>
       <ion-select [(ngModel)]="format">
         <ion-select-option *ngFor="let option of VariableFormat | enum" [(value)]="option.index">{{option.value | trim: '_'}}</ion-select-option>
       </ion-select>
-    </ion-item>
+    </ion-item> -->
   </ion-list>
   <ion-button expand="block" (click)="saveAndDismiss()">Save</ion-button>
 </ion-content>

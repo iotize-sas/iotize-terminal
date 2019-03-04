@@ -3,7 +3,7 @@ import { Content, ModalController, AlertController, ToastController } from '@ion
 import { LoggerService } from '../iotize/logger.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TerminalService, ModbusReadAnswer } from '../iotize/terminal.service';
-import { VariableFormat } from '@iotize/device-client.js/device/model';
+import { VariableFormat, ModbusOptions } from '@iotize/device-client.js/device/model';
 import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 import { ToastOptions } from '@ionic/core';
 import { MockFactory } from '../iotize/mockFactory';
@@ -23,7 +23,8 @@ export class ModbusPage implements OnInit {
   lastModbusRead: ModbusReadAnswer = {
     dataArray: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
     firstAddress : 0x4000,
-    format: VariableFormat._16_BITS
+    format: VariableFormat._16_BITS,
+    objectType: ModbusOptions.ObjectType.DEFAULT
   };  // Mocking
 
   constructor(public terminal: TerminalService,
@@ -60,19 +61,22 @@ export class ModbusPage implements OnInit {
     return await modal.present();
   }
 
-  toHexStringFn() {
+  formatToStringFactory() {
     const _this = this;
     const format = this.lastModbusRead.format;
     return function (val) {
-      return _this.toHexStringClosure(val, format);
+      return _this.formatToStringClosure(val, format);
     };
   }
 
-  toHexStringClosure(value, format) {
-    let result = value.toString(16);
-    result = '0000000' + result;
-    result = '0x' + result.slice(-(2 ** format));
-    return result;
+  formatToStringClosure(value, format) {
+    if (format !== 0) {
+      let result = value.toString(16);
+      result = '0000000' + result;
+      result = '0x' + result.slice(-(2 ** format));
+      return result;
+    }
+    return !!value;
   }
 
   async read() {
@@ -96,5 +100,10 @@ export class ModbusPage implements OnInit {
 
   mockedModbusRead() {
     this.lastModbusRead = MockFactory.modbusReadAnswer();
+    console.table(this.lastModbusRead);
+  }
+  canSend() {
+    return (this.terminal.modbusOptions.objectType !== ModbusOptions.ObjectType.DISCRET_INPUT) &&
+    (this.terminal.modbusOptions.objectType !== ModbusOptions.ObjectType.INPUT_REGISTER);
   }
 }

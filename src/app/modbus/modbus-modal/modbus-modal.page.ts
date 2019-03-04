@@ -24,8 +24,10 @@ export class ModbusModalPage implements OnInit {
   }
 
   set objectType(val: string) {
-    console.log(`Setting objectType with ${val} <=> ${ModbusOptions.ObjectType[val]}`);
+    // console.log(`Setting objectType with ${val} <=> ${ModbusOptions.ObjectType[val]}`);
     this._objectType = Number(val);
+    this._format = this._objectType === ModbusOptions.ObjectType.COIL || this._objectType === ModbusOptions.ObjectType.DISCRET_INPUT ?
+                VariableFormat._1_BIT : VariableFormat._16_BITS;
   }
 
   get format() {
