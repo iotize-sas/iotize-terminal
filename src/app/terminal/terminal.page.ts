@@ -1,5 +1,5 @@
 import { TerminalModalPage } from './terminal-modal/terminal-modal.page';
-import { Content, ModalController } from '@ionic/angular';
+import { IonContent, ModalController } from '@ionic/angular';
 import { LoggerService, Logline } from './../iotize/logger.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TerminalService } from '../iotize/terminal.service';
@@ -11,7 +11,7 @@ import { TerminalService } from '../iotize/terminal.service';
 })
 export class TerminalPage implements OnInit {
 
-  @ViewChild(Content) content: Content;
+  @ViewChild(IonContent) content: IonContent;
 
   data = '';
   linesCount = 0;

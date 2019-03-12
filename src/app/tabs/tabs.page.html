@@ -1,11 +1,17 @@
-<ion-tabs (ionChange)="tabChanged()">
-  <ion-tab label="Home" icon="bluetooth" href="/tabs/(home:home)">
-    <ion-router-outlet name="home"></ion-router-outlet>
-  </ion-tab>
-  <ion-tab label="Terminal" icon="code-working" [disabled]="!terminal.deviceService.isReady" href="/tabs/(terminal:terminal)">
-    <ion-router-outlet name="terminal"></ion-router-outlet>
-  </ion-tab>
-  <ion-tab label="Settings" icon="settings" [disabled]="!terminal.deviceService.isReady" href="/tabs/(settings:settings)">
-    <ion-router-outlet name="settings"></ion-router-outlet>
-  </ion-tab>
+<ion-tabs (ionTabsDidChange)="tabChanged()">
+  <ion-tab-bar slot="bottom" color="primary">
+    <ion-tab-button tab="home">
+      <ion-icon name="bluetooth"></ion-icon>
+      <ion-label>Home</ion-label>
+      <ion-router-outlet name="home"></ion-router-outlet>
+    </ion-tab-button>
+    <ion-tab-button tab="terminal" [disabled]="!terminal.deviceService.isReady">
+      <ion-icon name="code-working"></ion-icon>
+      <ion-label>Terminal</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="settings" [disabled]="!terminal.deviceService.isReady">
+      <ion-icon name="settings"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
 </ion-tabs>

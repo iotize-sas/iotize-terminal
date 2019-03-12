@@ -1,6 +1,6 @@
 import { TerminalService } from './../iotize/terminal.service';
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Tabs, Events } from '@ionic/angular';
+import { Events, IonTabs } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -15,11 +15,11 @@ export class TabsPage {
       this.events.subscribe('connected', () => this.changeDetector.detectChanges());
       this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
   }
-  @ViewChild(Tabs) tabs: Tabs;
+  @ViewChild(IonTabs) tabs: IonTabs;
 
   async tabChanged() {
     console.log('tab changed');
-    const label = (await this.tabs.getSelected()).label;
+    const label = await this.tabs.getSelected();
     console.log(`selected tab : ${label}`);
     if (label === 'Terminal' && this.terminal.deviceService.isReady) {
       this.terminal.launchReadingTask();
