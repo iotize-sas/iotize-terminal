@@ -22,6 +22,8 @@ export class ModbusPage implements OnInit {
   data = '';
   linesCount = 0;
 
+  savedModbusValues: ModbusReadAnswer[] = [];
+
   lastModbusRead: ModbusReadAnswer = {
     dataArray: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
     firstAddress: 0x4000,
@@ -38,12 +40,6 @@ export class ModbusPage implements OnInit {
     private keyboard: Keyboard) { }
 
   ngOnInit() {
-    this.logger.getLogLinesObservable()
-      .subscribe((logLine) => {
-        // this.logLines.push(logLine);
-        this.changeDetector.detectChanges();
-        this.content.scrollToBottom(0);
-      });
   }
 
   async send(data?: number) {
@@ -73,14 +69,16 @@ export class ModbusPage implements OnInit {
     return await modal.present();
   }
 
-  formatToStringFactory(displayAs: 'HEX' | 'DEC') {
+  formatToStringFactory(displayAs: 'HEX' | 'DEC', format?: VariableFormat) {
     if (displayAs === 'DEC') {
       return function (val) {
         return val;
       };
     } else {
       const _this = this;
-      const format = this.lastModbusRead.format;
+      if (!format) {
+        format = this.lastModbusRead.format;
+      }
       return function (val) {
         return _this.formatToStringClosure(val, format);
       };
@@ -125,11 +123,54 @@ export class ModbusPage implements OnInit {
       (this.terminal.modbusOptions.objectType !== ModbusOptions.ObjectType.INPUT_REGISTER);
   }
 
+  keepLine(id) {
+    console.log(id);
+    const offset = this.lastModbusRead.format === VariableFormat._32_BITS ? 2 : 1;
+    const address = this.lastModbusRead.firstAddress + id * offset;
+
+    if (this.savedModbusValues.find(el => el.firstAddress === address)) {
+      return;
+    }
+
+    const posInArray = id * 2 * offset;
+    this.savedModbusValues.push({
+      objectType: this.lastModbusRead.objectType,
+      format: this.lastModbusRead.format,
+      firstAddress: address,
+      dataArray: this.lastModbusRead.dataArray.slice(posInArray, posInArray + 2 * offset)
+    });
+    this.changeDetector.detectChanges();
+  }
+  deleteLine(id) {
+    this.savedModbusValues.splice(id, 1);
+    this.changeDetector.detectChanges();
+  }
+
+  async refresh(index: number) {
+    try {
+      const options: ModbusOptions = {
+        address: this.savedModbusValues[index].firstAddress,
+        format: this.savedModbusValues[index].format,
+        length: 1,
+        objectType: this.savedModbusValues[index].objectType,
+        slave: this.terminal.modbusOptions.slave
+      };
+      const refreshedModbus = await this.terminal.modBusRead(true, options);
+      this.savedModbusValues[index] = refreshedModbus;
+    } catch (error) {
+      this.showError(error);
+    }
+  }
+
+  savedModbusTrackFn(index, item) {
+    return index;
+  }
+
   showError(error) {
     if (ResultCodeTranslation[error] !== undefined) {
       this.showToast(`Error: device responded ${ResultCodeTranslation[error]}`, 0);
     } else {
-      this.showToast(`Error: device responded ${error}`, 0);
+      this.showToast(`Error: device responded ${error.message ? error.message : error}`, 0);
     }
   }
 }

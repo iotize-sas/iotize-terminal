@@ -143,14 +143,16 @@ export class TerminalService {
   //   this.isReading = false;
   // }
 
-  async modBusRead(firstTry: boolean = true): Promise<ModbusReadAnswer> {
-    const firstAddress = this.modbusOptions.address, format = this.modbusOptions.format, objectType = this.modbusOptions.objectType;
+  async modBusRead(firstTry: boolean = true, options?: ModbusOptions): Promise<ModbusReadAnswer> {
+    if (options === undefined) {
+      options = this.modbusOptions;
+    }
 
-    const response = await this.deviceService.device.service.target.modbusRead(this.modbusOptions);
+    const response = await this.deviceService.device.service.target.modbusRead(options);
     if (!response.isSuccessful()) {
       if (firstTry && response.codeRet() === ResultCode.IOTIZE_TARGET_PROTOCOL_COM) {
         await this.deviceService.device.service.target.connect();
-        return this.modBusRead(false);
+        return this.modBusRead(false, options);
       }
       throw response.codeRet();
     }
@@ -158,9 +160,9 @@ export class TerminalService {
     console.log(response.body());
     return {
       dataArray: response.body(),
-      firstAddress: firstAddress,
-      format: format,
-      objectType: objectType
+      firstAddress: options.address,
+      format: options.format,
+      objectType: options.objectType
     };
   }
 

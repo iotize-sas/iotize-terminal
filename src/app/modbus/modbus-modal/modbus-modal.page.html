@@ -12,12 +12,12 @@
   <ion-list>
     <ion-item>
       <ion-label>Slave</ion-label>
-      <ion-input type="number" min="0" [(ngModel)]="slave" class="right-align" (keyup.enter)="closeKeyboard()" clearOnEdit>
+      <ion-input type="number" min="0" [(ngModel)]="slave" class="right-align" (keyup.enter)="closeKeyboard()" clearInput>
         </ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Register</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="address" class="right-align" (keyup.enter)="closeKeyboard()" clearOnEdit>
+          <ion-input type="number" min="0" [(ngModel)]="address" class="right-align" (keyup.enter)="closeKeyboard()" clearInput>
             </ion-input>
     </ion-item>
     <ion-item>
@@ -34,7 +34,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Length</ion-label>
-        <ion-input type="number" min="1" step="1" [(ngModel)]="length" class="right-align" (keyup.enter)="closeKeyboard()" clearOnEdit>
+        <ion-input type="number" min="1" step="1" [(ngModel)]="length" class="right-align" (keyup.enter)="closeKeyboard()" clearInput>
         </ion-input>
     </ion-item>
     <ion-item>

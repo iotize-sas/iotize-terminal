@@ -30,22 +30,30 @@
 //     background-color: #2D3134;
 // }
 .com-buttons {
-    width: 100%;
+  width: 100%;
 }
 
 .no-overflow {
-    ion-col {   
-        word-wrap: normal;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+  ion-col {
+    word-wrap: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .smaller-text {
-    font-size: 80%;
+  font-size: 80%;
 }
 
 .right-align {
-    text-align: right;
-    padding-right: 10px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+ion-grid {
+  text-align: center !important;
+}
+
+ion-row.grid-header {
+  font-weight: bold;
 }

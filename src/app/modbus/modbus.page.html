@@ -9,23 +9,33 @@
 
 <ion-content class="data-table" [scrollY]="true">
   <!-- <p>Last retrieved values</p> -->
-  <!-- <ion-grid>
-    <ion-row>
-      <ion-col size="4">Address</ion-col>
-      <ion-col size="8">Value</ion-col>
-    </ion-row>
-    <ion-row *ngFor="let dataLine of lastModbusRead | modbusData">
-      <ion-col size="4">0x{{dataLine.key}}</ion-col>
-      <ion-col size="8">0x{{(dataLine.value).toString(16)}}</ion-col>
-    </ion-row>
-  </ion-grid> -->
+<ion-grid>
+    <ion-row class="grid-header sticky-header">
+      <ion-col [size]="4">Register#</ion-col>
+      <ion-col [size]="8">Value</ion-col>
+  </ion-row>
+  </ion-grid>
+  <app-scroll-table *ngFor="let modbusRead of savedModbusValues; let i = index; trackBy: savedModbusTrackFn"
+                    keyName="key"
+                    valueName="value"
+                    showHeader="true"
+                    [dataArray]="modbusRead | modbusData"
+                    [formatFn]="formatToStringFactory(terminal.displayMode, modbusRead.format)"
+                    [columnSize]="{key: 4, value: 8}"
+                    rightSlideButtonText="Delete"
+                    [rightSlideButtonStyle]="{'background': 'red'}"
+                    (rightSlideButtonClick)="deleteLine($event)"
+                    leftSlideButtonText="Refresh"
+                    (leftSlideButtonClick)="refresh(i)"
+                    ></app-scroll-table>
   <app-scroll-table keyName="key"
                     valueName="value"
-                    keyAlias="Register#"
-                    valueAlias="Value"
+                    showHeader="false"
                     [dataArray]="lastModbusRead | modbusData"
                     [formatFn]="formatToStringFactory(terminal.displayMode)"
                     [columnSize]="{key: 4, value: 8}"
+                    rightSlideButtonText="Keep"
+                    (rightSlideButtonClick)="keepLine($event)"
                     ></app-scroll-table>
 </ion-content>
 <ion-footer>
@@ -54,7 +64,7 @@
     </ion-row>
   </ion-grid>
   <ion-item>
-    <ion-input type="number" [placeholder]="canSend()? 'Data input' : 'Read only'" class="text-input" [disabled]="!canSend()" [(ngModel)]="data" (keyup.enter)="closeKeyboardAndSend(data)" clearOnEdit clearInput>
+    <ion-input type="number" [placeholder]="canSend()? 'Data input' : 'Read only'" class="text-input" [disabled]="!canSend()" [(ngModel)]="data" (keyup.enter)="closeKeyboardAndSend(data)" clearInput>
     </ion-input>
   </ion-item>
   <ion-item>  
@@ -62,14 +72,12 @@
       <ion-row>
         <ion-col size="6">
           <ion-button color="secondary" expand="block" [disabled]="!canSend()" (click)="send(data)">
-            <ion-icon name="send"></ion-icon>
-            SEND
+            SEND <ion-icon name="send"></ion-icon>
           </ion-button>
         </ion-col>
         <ion-col size="6">
           <ion-button color="secondary" expand="block" (click)="read()">
-            <ion-icon name="search"></ion-icon>
-            READ
+            READ <ion-icon name="search"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
