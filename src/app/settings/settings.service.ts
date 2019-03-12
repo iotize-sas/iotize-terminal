@@ -22,7 +22,7 @@ export class SettingsService {
       physicalPort: UartSettings.PhysicalPort.USB,
       stopBit: UartSettings.StopBit.ONE,
       bitParity: UartSettings.BitParity.NONE,
-      dataBitsLength: 8,
+      dataBitsLength: UartSettings.DataBitsLength._7,
       handshakeValue: UartSettings.Handshake.NONE,
       handshakeDelimiter: UartSettings.HandshakeDelimiter.NONE,
       timeout: 50,
@@ -103,10 +103,10 @@ export class SettingsService {
     this.settings.handshakeDelimiter = Number(value);
   }
   get dataBitsLength() {
-    return this.settings.handshakeDelimiter.toString();
+    return this.settings.dataBitsLength.toString();
   }
   set dataBitsLength(value) {
-    this.settings.handshakeDelimiter = Number(value);
+    this.settings.dataBitsLength = Number(value);
   }
   get bitParity() {
     return this.settings.bitParity.toString();
