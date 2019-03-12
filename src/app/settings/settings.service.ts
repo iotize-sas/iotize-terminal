@@ -128,7 +128,7 @@ export class SettingsService {
       await this.setUARTSettings();
     } catch (error) {
       this.logger.log('error', error);
-      throw (error);
+      throw new Error('can\'t apply settings');
     }
 
     // MOCKED IMPLEMENTATION

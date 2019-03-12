@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-button color="dark" (click)="toggleScan()" expand="full">{{ble.isScanning? 'Stop' : 'Start'}} Scan</ion-button>
+  <ion-button color="secondary" (click)="toggleScan()" expand="full">{{ble.isScanning? 'Stop' : 'Start'}} Scan</ion-button>
   <ion-list>
     <ng-container *ngFor="let device of devices">
       <ng-container [ngTemplateOutlet]="device.address != ble.selectedDevice? connectBlock : disconnectBlock" [ngTemplateOutletContext]="{device: device}"></ng-container>

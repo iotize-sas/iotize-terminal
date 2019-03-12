@@ -1,6 +1,6 @@
 import { TerminalService } from './../iotize/terminal.service';
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Tabs, Events } from '@ionic/angular';
+import { Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -12,19 +12,19 @@ export class TabsPage {
   constructor(public terminal: TerminalService,
     public events: Events,
     public changeDetector: ChangeDetectorRef) {
-      this.events.subscribe('connected', () => this.changeDetector.detectChanges());
-      this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
+      // this.events.subscribe('connected', () => this.changeDetector.detectChanges());
+      // this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
   }
-  @ViewChild(Tabs) tabs: Tabs;
+  // @ViewChild(Tabs) tabs: Tabs;
 
-  async tabChanged() {
-    console.log('tab changed');
-    const label = (await this.tabs.getSelected()).label;
-    console.log(`selected tab : ${label}`);
+  // async tabChanged() {
+  //   console.log('tab changed');
+  //   const label = (await this.tabs.getSelected()).label;
+  //   console.log(`selected tab : ${label}`);
     // if (label === 'Terminal' && this.terminal.deviceService.isReady) {
     //   this.terminal.launchReadingTask();
     // } else {
     //   this.terminal.stopReadingTask();
     // }
-  }
+  // }
 }

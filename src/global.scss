@@ -10,3 +10,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+
+
+.tab-btn-selected.sc-ion-tabbar-ios {
+    --tabbar-ios-text-color-active: var(--ion-tabbar-text-color-active, #488aff) !important;
+    --color-selected:var(--ion-tabbar-text-color-active, #488aff) !important;
+    color: var(--tabbar-ios-text-color-active);
+}

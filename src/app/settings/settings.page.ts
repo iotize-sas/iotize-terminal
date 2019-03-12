@@ -3,6 +3,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { TerminalService } from '../iotize/terminal.service';
 import { UartSettings } from '@iotize/device-client.js/device/model';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
   selector: 'app-settings',
@@ -16,7 +17,8 @@ export class SettingsPage {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public changeDetector: ChangeDetectorRef,
-    public toastController: ToastController) { }
+    public toastController: ToastController,
+    private keyboard: Keyboard) { }
 
   get UartSettings() {
     return UartSettings;
@@ -53,10 +55,9 @@ export class SettingsPage {
     try {
       await this.settings.applyChanges();
       loader.dismiss();
-      console.log('apply changes ended, launching reading task');
     } catch (error) {
       loader.dismiss();
-      this.showToast(error);
+      this.showClosingToast(error.message);
     }
   }
   async readSettingsFromTap() {
@@ -90,41 +91,7 @@ export class SettingsPage {
     toast.present();
   }
 
-  async testSetUART() {
-    try {
-      await this.settings.deviceService.device.service.target.disconnect();
-      const confirm = await this.alertCtrl.create({
-        header: 'Apply new settings',
-        message: 'Are you sure?',
-        buttons: [
-          {
-            text: 'No',
-            role: 'cancel',
-            handler: () => {
-            }
-          },
-          {
-            text: 'Yes',
-            handler: async () => {
-              const response = await this.settings.deviceService.device.service.target.setUARTSettings(this.settings._settings);
-
-              console.log('apply changes ended, launching reading task');
-              if (response.isSuccess()) {
-                console.log('>>>>>>> connecting');
-                await this.settings.deviceService.device.service.target.connect();
-                return;
-              } else {
-                throw new Error('setUARTSettings response failed');
-              }
-            }
-          },
-        ]
-      });
-      await confirm.present();
-
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+  closeKeyboard() {
+    this.keyboard.hide();
   }
 }

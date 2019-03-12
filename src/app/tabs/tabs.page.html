@@ -1,11 +1,20 @@
 <ion-tabs (ionChange)="tabChanged()">
-  <ion-tab label="Home" icon="bluetooth" href="/tabs/(home:home)">
-    <ion-router-outlet name="home"></ion-router-outlet>
-  </ion-tab>
-  <ion-tab label="Modbus" icon="code-working" href="/tabs/(modbus:modbus)">
-    <ion-router-outlet name="modbus"></ion-router-outlet>
-  </ion-tab>
-  <ion-tab label="Settings" icon="settings" href="/tabs/(settings:settings)">
-    <ion-router-outlet name="settings"></ion-router-outlet>
-  </ion-tab>
+
+  <ion-tab-bar slot="bottom" color="primary">
+    <ion-tab-button tab="home">
+      <ion-icon name="bluetooth"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="modbus">
+      <ion-icon name="code-working"></ion-icon>
+      <ion-label>Modbus</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="settings">
+      <ion-icon name="settings"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
 </ion-tabs>

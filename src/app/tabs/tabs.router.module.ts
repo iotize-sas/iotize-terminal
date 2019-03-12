@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TabsPage } from './tabs.page';
-import { HomePage } from '../home/home.page';
-import { ModbusPage } from '../modbus/modbus.page';
-import { SettingsPage } from '../settings/settings.page';
 
 const routes: Routes = [
   {
@@ -12,30 +9,37 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: '',
-        redirectTo: '/tabs/(home:home)',
-        pathMatch: 'full',
-      },
-      {
         path: 'home',
-        outlet: 'home',
-        component: HomePage
+        children: [
+          {
+            path: '',
+            loadChildren: '../home/home.module#HomePageModule'
+          }
+        ]
       },
       {
         path: 'modbus',
-        outlet: 'modbus',
-        component: ModbusPage
+        children: [
+          {
+            path: '',
+            loadChildren: '../modbus/modbus.module#ModbusPageModule'
+          }
+        ]
       },
       {
         path: 'settings',
-        outlet: 'settings',
-        component: SettingsPage
+        children: [
+          {
+            path: '',
+            loadChildren: '../settings/settings.module#SettingsPageModule'
+          }
+        ]
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/(home:home)',
+    redirectTo: '/tabs/home',
     pathMatch: 'full'
   }
 ];

@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { DeviceService } from '../iotize/device/device.service';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
               public alertCtrl: AlertController,
               public deviceService: DeviceService,
               public changeDetector: ChangeDetectorRef,
-              public loadingCtrl: LoadingController) { }
+              public loadingCtrl: LoadingController,
+              private keyboard: Keyboard) { }
 
   ngOnInit() {}
 

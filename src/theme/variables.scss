@@ -4,21 +4,25 @@
 /** Ionic CSS Variables **/
 :root {
 
+  --iotize-light-blue: #008DD2;
+  --iotize-medium-blue: #004C68;
+  --iotize-dark-blue: #272a2e;
+
   /** primary **/
-  --ion-color-primary: #008DD2;
-  --ion-color-primary-rgb: 56,128,255;
+  --ion-color-primary: var(--iotize-light-blue);
+  --ion-color-primary-rgb: 0,141,210;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255,255,255;
-  --ion-color-primary-shade: #3171e0;
+  --ion-color-primary-shade: #0078b4;
   --ion-color-primary-tint: #4c8dff;
 
   /** secondary **/
-  --ion-color-secondary: #0cd1e8;
-  --ion-color-secondary-rgb: 12,209,232;
+  --ion-color-secondary: var(--iotize-medium-blue);
+  --ion-color-secondary-rgb: 0,76,104;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255,255,255;
-  --ion-color-secondary-shade: #0bb8cc;
-  --ion-color-secondary-tint: #24d6ea;
+  --ion-color-secondary-shade: #003b50;
+  --ion-color-secondary-tint: #006083;
 
   /** tertiary **/
   --ion-color-tertiary: #7044ff;
@@ -77,9 +81,12 @@
   --ion-color-light-tint: #f4f5f5;
 
   /** Tabs **/
-  --ion-tabbar-text-color-active: var(--ion-color-light);
-  --ion-tabbar-text-color: var(--ion-color-primary-contrast);
-  --ion-tabbar-background-color: var(--ion-color-primary);
+  // --ion-tabbar-text-color-active: var(--ion-color-light-shade);
+  // --ion-tabbar-text-color: var(--ion-color-primary-contrast);
+  // --ion-tabbar-background-color: var(--ion-color-primary);
 
-  --ion-color-selected: rgb(193, 234, 255) !important;
+  // --ion-color-selected: rgb(193, 234, 255) !important;
+  // --tabbar-ios-text-color-active: var(--ion-tabbar-text-color-active);
+  // --color-selected: var(--ion-color-selected) !important;
+
 }

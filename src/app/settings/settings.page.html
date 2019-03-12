@@ -25,7 +25,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Timeout</ion-label>
-      <ion-input type="number" [(ngModel)]="settings.settings.timeout" class="right-align"></ion-input>
+      <ion-input type="number" [(ngModel)]="settings.settings.timeout" class="right-align" (keyup.enter)="closeKeyboard()"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Handshake</ion-label>
