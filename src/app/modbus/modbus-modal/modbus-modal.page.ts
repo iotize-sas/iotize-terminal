@@ -2,6 +2,7 @@ import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { TerminalService } from '../../iotize/terminal.service';
 import { ModbusOptions, VariableFormat } from '@iotize/device-client.js/device/model';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @Component({
   selector: 'app-modbus-modal',
@@ -11,13 +12,15 @@ import { ModbusOptions, VariableFormat } from '@iotize/device-client.js/device/m
 export class ModbusModalPage implements OnInit {
 
   constructor(public terminal: TerminalService,
-              public modal: ModalController) { }
+              public modal: ModalController,
+              private keyboard: Keyboard) { }
 
   slave: number;
   address: number;
   _objectType: ModbusOptions.ObjectType;
   _format: VariableFormat;
   length: number;
+  displayMode: 'HEX' | 'DEC';
 
   get objectType() {
     return this._objectType.toString();
@@ -52,12 +55,17 @@ export class ModbusModalPage implements OnInit {
     return VariableFormat;
   }
 
+  get canChangeFormat() {
+    return this._objectType !== ModbusOptions.ObjectType.COIL && this._objectType !== ModbusOptions.ObjectType.DISCRET_INPUT;
+  }
+
   getSavedOptions() {
     this.slave = this.terminal.modbusOptions.slave;
     this.address = this.terminal.modbusOptions.address;
     this._objectType = this.terminal.modbusOptions.objectType;
     this._format = this.terminal.modbusOptions.format;
     this.length = this.terminal.modbusOptions.length;
+    this.displayMode = this.terminal.displayMode;
   }
 
   saveOptions() {
@@ -66,10 +74,15 @@ export class ModbusModalPage implements OnInit {
     this.terminal.modbusOptions.objectType = this._objectType;
     this.terminal.modbusOptions.format = this._format;
     this.terminal.modbusOptions.length = this.length;
+    this.terminal.displayMode = this.displayMode;
   }
 
   saveAndDismiss() {
     this.saveOptions();
     this.dismiss();
+  }
+
+  closeKeyboard() {
+    this.keyboard.hide();
   }
 }

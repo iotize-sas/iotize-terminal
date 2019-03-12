@@ -21,7 +21,6 @@ import { ScrollTableModule } from '../scroll-table/scroll-table.module';
     PipeModule,
     ScrollTableModule
   ],
-  declarations: [ModbusPage],
-  entryComponents: [ModbusModalPage]
+  declarations: [ModbusPage]
 })
 export class ModbusPageModule {}

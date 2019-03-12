@@ -13,7 +13,7 @@ export class ModbusDataPipe implements PipeTransform {
       for (let i = 0; i < input.dataArray.length; i++) {
         array.push(
           {
-            key: (i + input.firstAddress).toString(16),
+            key: i + input.firstAddress,
             value: input.dataArray[i]
           }
           );
@@ -23,7 +23,7 @@ export class ModbusDataPipe implements PipeTransform {
       for (let i = 0; i < input.dataArray.length; i++) {
         array.push(
           {
-            key: (i + input.firstAddress).toString(16),
+            key: i + input.firstAddress,
             value: input.dataArray[i]
           }
           );
@@ -33,7 +33,7 @@ export class ModbusDataPipe implements PipeTransform {
       for (let i = 0; i < input.dataArray.length / 2; i++) {
         array.push(
           {
-            key: (i + input.firstAddress).toString(16),
+            key: i + input.firstAddress,
             value: input.dataArray[2 * i] * 0x100 + input.dataArray[2 * i + 1]
           }
         );
@@ -43,7 +43,7 @@ export class ModbusDataPipe implements PipeTransform {
       for (let i = 0; i < input.dataArray.length / 4; i++) {
         array.push(
           {
-            key: (i * 2 + input.firstAddress).toString(),
+            key: i * 2 + input.firstAddress,
             value: input.dataArray[4 * i] * 0x1000000 + input.dataArray[4 * i + 1] * 0x10000
                  + input.dataArray[4 * i + 2] * 0x100 + input.dataArray[4 * i + 3]
           }

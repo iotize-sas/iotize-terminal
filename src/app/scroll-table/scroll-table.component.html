@@ -4,7 +4,7 @@
       <ion-col [size]="columnSize? columnSize.value : 6">{{valueAlias? valueAlias : 'value'}}</ion-col>
     </ion-row>
     <ion-row *ngFor="let dataLine of dataArray" class="grid-body">
-      <ion-col [size]="columnSize? columnSize.key : 6">0x{{dataLine[keyName]}}</ion-col>
+      <ion-col [size]="columnSize? columnSize.key : 6">{{dataLine[keyName]}}</ion-col>
       <ion-col [size]="columnSize? columnSize.value : 6">{{formatFn? formatFn(dataLine[valueName]) : dataLine[valueName]}}</ion-col>
     </ion-row>
   </ion-grid>

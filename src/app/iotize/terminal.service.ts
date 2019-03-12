@@ -4,6 +4,8 @@ import { DeviceService } from './device/device.service';
 import { LoggerService } from './logger.service';
 import { Injectable } from '@angular/core';
 import { ModbusOptions, VariableFormat } from '@iotize/device-client.js/device/model';
+import { ResultCode } from '@iotize/device-client.js/client/api/response';
+import { NumberConverter } from '@iotize/device-client.js/client/impl';
 
 export interface ModbusReadAnswer {
   firstAddress: number;
@@ -20,11 +22,11 @@ export class ModbusTerminalOptions implements ModbusOptions {
     this.length = options.length;
     this.objectType = options.objectType;
   }
-  address;
-  slave;
-  format;
-  length;
-  objectType;
+  address: number;
+  slave: number;
+  format: VariableFormat;
+  length: number;
+  objectType: ModbusOptions.ObjectType;
 
   get objectTypeString(): string {
     return ModbusOptions.ObjectType[this.objectType];
@@ -39,12 +41,13 @@ export class ModbusTerminalOptions implements ModbusOptions {
 })
 export class TerminalService {
 
+  displayMode: 'HEX' | 'DEC' = 'HEX';
   isReading = false;
   private refreshTime = 1000;
   dataType: 'ASCII' | 'HEX' = 'ASCII';
   endOfLine: Array<string> = [];
 
-  modbusOptions = new ModbusTerminalOptions ({
+  modbusOptions = new ModbusTerminalOptions({
     address: 0,
     slave: 1,
     format: VariableFormat._16_BITS,
@@ -53,9 +56,14 @@ export class TerminalService {
   });
 
   constructor(public logger: LoggerService,
-              public deviceService: DeviceService,
-              public settings: SettingsService) {
-              }
+    public deviceService: DeviceService,
+    public settings: SettingsService) {
+  }
+
+  async sendNumber(data: number) {
+    const dataArray: Uint8Array = NumberConverter.uint16Instance().encode(data);
+    return this.modBusWrite(dataArray, this.modbusOptions);
+  }
 
   async send(data: Uint8Array) {
     try {
@@ -71,51 +79,51 @@ export class TerminalService {
       this.logger.log('error', error);
     }
   }
-  sendString(textToSend: string) {
+  // sendString(textToSend: string) {
 
-    let data: Uint8Array;
-    let suffix = '';
+  //   let data: Uint8Array;
+  //   let suffix = '';
 
-    for (const end of this.endOfLine) {
-      if (end === 'CR') {
-        suffix += '\r';
-      }
-      if (end === 'LF') {
-        suffix += '\n';
-      }
-    }
-    switch (this.dataType) {
-      case 'HEX':
-      data = FormatHelper.hexStringToBuffer(textToSend);
-      break;
-      case 'ASCII':
-      data = FormatHelper.toByteBuffer(textToSend + suffix);
-      break;
-    }
-    console.log(`sending: ${textToSend + suffix}`);
-    this.send(data);
-  }
+  //   for (const end of this.endOfLine) {
+  //     if (end === 'CR') {
+  //       suffix += '\r';
+  //     }
+  //     if (end === 'LF') {
+  //       suffix += '\n';
+  //     }
+  //   }
+  //   switch (this.dataType) {
+  //     case 'HEX':
+  //     data = FormatHelper.hexStringToBuffer(textToSend);
+  //     break;
+  //     case 'ASCII':
+  //     data = FormatHelper.toByteBuffer(textToSend + suffix);
+  //     break;
+  //   }
+  //   console.log(`sending: ${textToSend + suffix}`);
+  //   return this.send(data);
+  // }
 
-  async read() {
-    try {
-      const response = (await this.deviceService.device.service.target.readBytes());
-      if (response.isSuccess()) {
-        if (response.body() !== null) {
-          let responseString = '';
-          if (this.dataType === 'ASCII') {
-            responseString = FormatHelper.toAsciiString(response.body());
-          } else if (this.dataType === 'HEX') {
-            responseString = FormatHelper.toHexString(response.body());
-          }
-          this.logger.log('info', responseString);
-                }
-        return;
-      }
-      this.logger.log('error', 'response failed');
-    } catch (error) {
-      this.logger.log('error', error);
-    }
-  }
+  // async read() {
+  //   try {
+  //     const response = (await this.deviceService.device.service.target.readBytes());
+  //     if (response.isSuccess()) {
+  //       if (response.body() !== null) {
+  //         let responseString = '';
+  //         if (this.dataType === 'ASCII') {
+  //           responseString = FormatHelper.toAsciiString(response.body());
+  //         } else if (this.dataType === 'HEX') {
+  //           responseString = FormatHelper.toHexString(response.body());
+  //         }
+  //         this.logger.log('info', responseString);
+  //               }
+  //       return;
+  //     }
+  //     this.logger.log('error', 'response failed');
+  //   } catch (error) {
+  //     this.logger.log('error', error);
+  //   }
+  // }
 
   // launchReadingTask() {
   //   this.isReading = true;
@@ -135,13 +143,19 @@ export class TerminalService {
   //   this.isReading = false;
   // }
 
-  async modBusRead(): Promise<ModbusReadAnswer> {
+  async modBusRead(firstTry: boolean = true): Promise<ModbusReadAnswer> {
     const firstAddress = this.modbusOptions.address, format = this.modbusOptions.format, objectType = this.modbusOptions.objectType;
 
     const response = await this.deviceService.device.service.target.modbusRead(this.modbusOptions);
     if (!response.isSuccessful()) {
+      if (firstTry && response.codeRet() === ResultCode.IOTIZE_TARGET_PROTOCOL_COM) {
+        await this.deviceService.device.service.target.connect();
+        return this.modBusRead(false);
+      }
       throw response.codeRet();
     }
+
+    console.log(response.body());
     return {
       dataArray: response.body(),
       firstAddress: firstAddress,

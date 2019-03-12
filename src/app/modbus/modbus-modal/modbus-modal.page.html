@@ -1,8 +1,8 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Modbus Settings</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">BACK</ion-button>
+      <ion-button (click)="dismiss()">Back</ion-button>
       <ion-back-button text="BACK"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
@@ -12,12 +12,12 @@
   <ion-list>
     <ion-item>
       <ion-label>Slave</ion-label>
-      <ion-input type="number" min="0" [(ngModel)]="slave" class="right-align">
+      <ion-input type="number" min="0" [(ngModel)]="slave" class="right-align" (keyup.enter)="closeKeyboard()" clearOnEdit>
         </ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Address</ion-label>
-          <ion-input type="number" min="0" [(ngModel)]="address" class="right-align">
+        <ion-label>Register</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="address" class="right-align" (keyup.enter)="closeKeyboard()" clearOnEdit>
             </ion-input>
     </ion-item>
     <ion-item>
@@ -26,12 +26,24 @@
         <ion-select-option *ngFor="let option of ModbusOptions.ObjectType | enum" [(value)]="option.index">{{option.value}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <!-- <ion-item>
+    <ion-item>
       <ion-label>Format</ion-label>
-      <ion-select [(ngModel)]="format">
+      <ion-select [(ngModel)]="format" [disabled]="!canChangeFormat">
         <ion-select-option *ngFor="let option of VariableFormat | enum" [(value)]="option.index">{{option.value | trim: '_'}}</ion-select-option>
       </ion-select>
-    </ion-item> -->
+    </ion-item>
+    <ion-item>
+      <ion-label>Length</ion-label>
+        <ion-input type="number" min="1" step="1" [(ngModel)]="length" class="right-align" (keyup.enter)="closeKeyboard()" clearOnEdit>
+        </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Display mode</ion-label>
+      <ion-select [(ngModel)]="displayMode">
+        <ion-select-option value="HEX">HEX</ion-select-option>
+        <ion-select-option value="DEC">DEC</ion-select-option>
+      </ion-select>
+    </ion-item>
   </ion-list>
   <ion-button expand="block" (click)="saveAndDismiss()">Save</ion-button>
 </ion-content>

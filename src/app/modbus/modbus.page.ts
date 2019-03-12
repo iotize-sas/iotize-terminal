@@ -1,11 +1,13 @@
 import { ModbusModalPage } from './modbus-modal/modbus-modal.page';
-import { Content, ModalController, AlertController, ToastController } from '@ionic/angular';
+import { IonContent, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { LoggerService } from '../iotize/logger.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TerminalService, ModbusReadAnswer } from '../iotize/terminal.service';
 import { VariableFormat, ModbusOptions } from '@iotize/device-client.js/device/model';
 import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 import { ToastOptions } from '@ionic/core';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
+
 import { MockFactory } from '../iotize/mockFactory';
 
 @Component({
@@ -15,16 +17,16 @@ import { MockFactory } from '../iotize/mockFactory';
 })
 export class ModbusPage implements OnInit {
 
-  @ViewChild(Content) content: Content;
+  @ViewChild(IonContent) content: IonContent;
 
   data = '';
   linesCount = 0;
 
   lastModbusRead: ModbusReadAnswer = {
     dataArray: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
-    firstAddress : 0x4000,
+    firstAddress: 0x4000,
     format: VariableFormat._16_BITS,
-    objectType: ModbusOptions.ObjectType.DEFAULT
+    objectType: ModbusOptions.ObjectType.HOLDING_REGISTER
   };  // Mocking
 
   constructor(public terminal: TerminalService,
@@ -32,7 +34,8 @@ export class ModbusPage implements OnInit {
     public changeDetector: ChangeDetectorRef,
     public modalController: ModalController,
     public toastCtrl: ToastController,
-    public alertCtrl: AlertController) { }
+    public alertCtrl: AlertController,
+    private keyboard: Keyboard) { }
 
   ngOnInit() {
     this.logger.getLogLinesObservable()
@@ -43,10 +46,19 @@ export class ModbusPage implements OnInit {
       });
   }
 
-  send(data: string) {
-    if (data !== '') {
-      this.terminal.sendString(data);
+  async send(data?: number) {
+    if (data !== undefined) {
+      try {
+        await this.terminal.sendNumber(data);
+      } catch (error) {
+        this.showError(error);
+      }
     }
+  }
+
+  closeKeyboardAndSend(data: number) {
+    this.keyboard.hide();
+    return this.send(data);
   }
 
   clear() {
@@ -61,17 +73,23 @@ export class ModbusPage implements OnInit {
     return await modal.present();
   }
 
-  formatToStringFactory() {
-    const _this = this;
-    const format = this.lastModbusRead.format;
-    return function (val) {
-      return _this.formatToStringClosure(val, format);
-    };
+  formatToStringFactory(displayAs: 'HEX' | 'DEC') {
+    if (displayAs === 'DEC') {
+      return function (val) {
+        return val;
+      };
+    } else {
+      const _this = this;
+      const format = this.lastModbusRead.format;
+      return function (val) {
+        return _this.formatToStringClosure(val, format);
+      };
+    }
   }
 
   formatToStringClosure(value, format) {
     if (format !== 0) {
-      let result = value.toString(16);
+      let result = value.toString(16).toUpperCase();
       result = '0000000' + result;
       result = '0x' + result.slice(-(2 ** format));
       return result;
@@ -83,12 +101,12 @@ export class ModbusPage implements OnInit {
     try {
       this.lastModbusRead = await this.terminal.modBusRead();
     } catch (error) {
-      this.showToast(`Error: device responded ${ResultCodeTranslation[error]}`, 0);
+      this.showError(error);
     }
   }
 
-  async showToast(msg: string, duration= 3000) {
-    const toastOptions: ToastOptions = {message: msg};
+  async showToast(msg: string, duration = 3000) {
+    const toastOptions: ToastOptions = { message: msg };
     if (duration === 0) {
       toastOptions.showCloseButton = true;
     } else {
@@ -104,6 +122,14 @@ export class ModbusPage implements OnInit {
   }
   canSend() {
     return (this.terminal.modbusOptions.objectType !== ModbusOptions.ObjectType.DISCRET_INPUT) &&
-    (this.terminal.modbusOptions.objectType !== ModbusOptions.ObjectType.INPUT_REGISTER);
+      (this.terminal.modbusOptions.objectType !== ModbusOptions.ObjectType.INPUT_REGISTER);
+  }
+
+  showError(error) {
+    if (ResultCodeTranslation[error] !== undefined) {
+      this.showToast(`Error: device responded ${ResultCodeTranslation[error]}`, 0);
+    } else {
+      this.showToast(`Error: device responded ${error}`, 0);
+    }
   }
 }
