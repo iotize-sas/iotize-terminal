@@ -16,10 +16,17 @@ app-tabs {
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
+.sc-ion-tab-button-md-h {
+    background: #008DD2 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
 .tab-selected.sc-ion-tab-button-md-h {
     color:rgb(255, 255, 255) !important;
 }
 
-a.sc-ion-tab-button-md-h:hover {
-    color:rgb(255, 255, 255) !important;
+a.sc-ion-tab-button-md.sc-ion-tab-button-md-s:hover {
+    color:rgb(255, 0, 0) !important;
 }
+
+
