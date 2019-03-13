@@ -3,6 +3,7 @@ import { LoggerService } from './../iotize/logger.service';
 import { Injectable } from '@angular/core';
 import { UartSettings } from '@iotize/device-client.js/device/model';
 import { Events } from '@ionic/angular';
+import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,7 @@ export class SettingsService {
         this.settings = Object.assign({}, this._settings);
         return;
       }
-      throw new Error('getUARTSettings response failed');
+      throw new Error('getUARTSettings response failed: ' + ResultCodeTranslation[response.codeRet()]);
 
     } catch (error) {
       throw error;
@@ -64,11 +65,15 @@ export class SettingsService {
         return;
       } else {
 
-        throw new Error('setUARTSettings response failed');
+        throw new Error('setUARTSettings response failed: ' + ResultCodeTranslation[response.codeRet()]);
       }
 
     } catch (error) {
-      this.logger.log('error', error);
+      if (error.message) {
+        this.logger.log('error', error.message);
+      } else {
+        this.logger.log('error', error);
+      }
       throw (error);
     }
   }
@@ -127,7 +132,11 @@ export class SettingsService {
       this._settings = Object.assign({}, this.settings);
       await this.setUARTSettings();
     } catch (error) {
-      this.logger.log('error', error);
+      if (error.message) {
+        this.logger.log('error', error.message);
+      } else {
+        this.logger.log('error', error);
+      }
       throw (error);
     }
 

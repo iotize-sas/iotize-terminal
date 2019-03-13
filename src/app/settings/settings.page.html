@@ -4,11 +4,11 @@
       Settings
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="terminal.deviceService.connectedId === 0" color="dark" (click)="openLoginAlert()">
+      <ion-button *ngIf="terminal.deviceService.connectedId === 0" (click)="openLoginAlert()">
         <ion-icon slot="end" name="log-in"></ion-icon>
         Login
       </ion-button>
-      <ion-button *ngIf="terminal.deviceService.connectedId !== 0" color="dark" (click)="openLogoutAlert()">
+      <ion-button *ngIf="terminal.deviceService.connectedId !== 0" (click)="openLogoutAlert()">
         <ion-icon slot="end" name="log-out"></ion-icon>
         Logout
       </ion-button>

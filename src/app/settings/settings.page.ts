@@ -3,6 +3,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { TerminalService } from '../iotize/terminal.service';
 import { UartSettings } from '@iotize/device-client.js/device/model';
+import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 
 @Component({
   selector: 'app-settings',
@@ -114,7 +115,7 @@ export class SettingsPage {
                 await this.settings.deviceService.device.service.target.connect();
                 return;
               } else {
-                throw new Error('setUARTSettings response failed');
+                throw new Error('setUARTSettings response failed: ' + ResultCodeTranslation[response.codeRet()]);
               }
             }
           },

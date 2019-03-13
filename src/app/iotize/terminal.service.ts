@@ -4,6 +4,7 @@ import { DeviceService } from './device/device.service';
 import { LoggerService } from './logger.service';
 import { Injectable } from '@angular/core';
 import { interval } from 'rxjs';
+import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,13 @@ export class TerminalService {
           return;
         }
       }
-      this.logger.log('error', 'response failed');
+      this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
     } catch (error) {
-      this.logger.log('error', error);
+      if (error.message) {
+        this.logger.log('error', error.message);
+      } else {
+        this.logger.log('error', error);
+      }
     }
   }
   sendString(textToSend: string) {
@@ -74,9 +79,13 @@ export class TerminalService {
                 }
         return;
       }
-      this.logger.log('error', 'response failed');
+      this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
     } catch (error) {
-      this.logger.log('error', error);
+      if (error.message) {
+        this.logger.log('error', error.message);
+      } else {
+        this.logger.log('error', error);
+      }
     }
   }
 

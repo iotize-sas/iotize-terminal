@@ -23,9 +23,11 @@ ion-content {
 }
 
 ion-footer {
-    background-color: #2D3134;
+    background-color: #2D3134 !important;
     border-top: 1px solid lightgray;
 }
-ion-footer ion-button {
+
+ion-item {
     background-color: #2D3134;
+    --background: #2D3134;
 }

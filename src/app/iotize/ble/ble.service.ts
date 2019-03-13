@@ -43,7 +43,8 @@ export class BleService {
     iotizeBLE.startScan((result) => {
       console.log(result);
       this.isScanning = true;
-
+      if (result === 'Ok') return;
+      
       this.devices$.next(result);
       // this.devices$.next(JSON.parse(result));
     }, (error) => {
