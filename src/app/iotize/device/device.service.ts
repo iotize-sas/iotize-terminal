@@ -32,7 +32,7 @@ export class DeviceService {
     } catch (error) {
       console.error('init failed');
       console.error(error);
-      throw new Error('Connection Failed');
+      throw new Error('Connection Failed: ' + (error.message? error.message : error));
     }
   }
 

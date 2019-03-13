@@ -2,6 +2,7 @@ import { LoadingController, ToastController, Events } from '@ionic/angular';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { BleService, DiscoveredDeviceType } from './../iotize/ble/ble.service';
 import { Subscription } from 'rxjs';
+import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +37,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
     this.events.subscribe('needChangeDetection', () => this.changeDetector.detectChanges());
   }
+
   async connect(device: DiscoveredDeviceType) {
     console.log(`connect to ${device.name}`);
     const loader = await this.loadingCtrl.create({
@@ -47,6 +49,7 @@ export class HomePage implements OnInit, OnDestroy {
       loader.dismiss();
     } catch (error) {
       loader.dismiss();
+      this.showError(error);
     }
     this.changeDetector.detectChanges();
   }
@@ -60,6 +63,7 @@ export class HomePage implements OnInit, OnDestroy {
       await this.ble.disconnect();
     } catch (error) {
       console.error(error);
+      this.showError(error);
     }
     loader.dismiss();
     console.log(this.ble.selectedDevice);
@@ -77,5 +81,23 @@ export class HomePage implements OnInit, OnDestroy {
     }
     this.devices = this.devices.filter(device => device.address === this.ble.selectedDevice);
     this.ble.startScan();
+  }
+
+  async showToast(message: string, duration: number = 3000): Promise<void> {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: duration,
+      showCloseButton: duration === 0
+    });
+
+    toast.present();
+  }
+
+  showError(error) {
+    if (ResultCodeTranslation[error] !== undefined) {
+      this.showToast(`Error: device responded ${ResultCodeTranslation[error]}`, 0);
+    } else {
+      this.showToast(`Error: device responded ${error.message ? error.message : error}`, 0);
+    }
   }
 }

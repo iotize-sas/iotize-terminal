@@ -102,7 +102,7 @@ export class BleService {
     } catch (exception) {
       console.error('connection failed, disconnecting...');
       await this.deviceService.disconnect();
-      throw new Error('connectTo failed');
+      throw exception;
     }
   }
 
@@ -122,7 +122,7 @@ export class BleService {
     } catch (error) {
       console.error(error);
       this.deviceService.clear();
-      throw new Error('connection failed');
+      throw error;
     }
   }
 
@@ -131,6 +131,7 @@ export class BleService {
       await this.deviceService.disconnect();
     } catch (error) {
       console.error(error);
+      throw error;
     }
     this.selectedDevice = '';
   }
