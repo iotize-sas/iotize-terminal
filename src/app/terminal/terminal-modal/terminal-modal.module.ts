@@ -7,20 +7,13 @@ import { IonicModule } from '@ionic/angular';
 
 import { TerminalModalPage } from './terminal-modal.page';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: TerminalModalPage
-  }
-];
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
+    IonicModule
   ],
-  declarations: [TerminalModalPage]
+  declarations: [TerminalModalPage],
+  entryComponents: [TerminalModalPage]
 })
 export class TerminalModalPageModule {}
