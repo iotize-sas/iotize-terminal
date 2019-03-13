@@ -104,7 +104,7 @@ export class BleService {
     } catch (exception) {
       console.error('connection failed, disconnecting...');
       await this.deviceService.disconnect();
-      throw new Error('connectTo failed');
+      throw new Error('connectTo failed: ' + exception.message? exception.message : exception);
     }
   }
 
