@@ -18,8 +18,8 @@
   </ion-item>
 </ng-template>
 <ng-template #disconnectBlock let-device='device'>
-  <ion-item color="primary" click)="disconnect();">
+  <ion-item button color="primary" (click)="disconnect();" detail="true" detailIcon="checkmark-circle">
     {{device.name}}
-    <ion-icon name="checkmark-circle" item-right></ion-icon>
+    <!-- <ion-icon name="checkmark-circle" item-right></ion-icon> -->
   </ion-item>
 </ng-template>
