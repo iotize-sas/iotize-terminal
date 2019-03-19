@@ -1,1 +1,26 @@
+app-tabs {
+    --tabbar-ios-text-color-active: var(--ion-tabbar-text-color-active, #488aff) !important;
+    --color-selected:var(--ion-tabbar-text-color-active, #488aff) !important;
+}
 
+
+.tab-btn-selected {
+    --tabbar-ios-text-color-active: var(--ion-tabbar-text-color-active, #488aff) !important;
+    --color-selected:var(--ion-tabbar-text-color-active, #488aff) !important;
+    color: var(--tabbar-ios-text-color-active);
+}
+
+/*fix colors on windows build*/
+.sc-ion-tab-bar-md-h {
+    background: #008DD2 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.sc-ion-tab-button-md-h {
+    background: #008DD2 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.tab-selected.sc-ion-tab-button-md-h {
+    color:rgb(255, 255, 255) !important;
+}
