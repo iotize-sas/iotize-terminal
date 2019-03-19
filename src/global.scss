@@ -17,3 +17,7 @@
     --color-selected:var(--ion-tabbar-text-color-active, #488aff) !important;
     color: var(--tabbar-ios-text-color-active);
 }
+
+a.sc-ion-tab-button-md:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
