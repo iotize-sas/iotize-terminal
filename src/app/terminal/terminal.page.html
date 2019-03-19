@@ -13,11 +13,11 @@
 </ion-header>
 
 <ion-content class="log" [scrollY]="true">
-    <p *ngFor="let line of logLines" [class]="line.level">{{line.message}}</p>
+    <span *ngFor="let line of logLines" [class]="line.level">{{line.message}}</span>
 </ion-content>
 <ion-footer>
   <ion-item>
-    <ion-input type="text" placeholder="Data input" class="text-input" [(ngModel)]="data"></ion-input>
+    <ion-input type="text" placeholder="Data input" class="text-input" [(ngModel)]="data" (keyup.enter)="send(data)"></ion-input>
     <ion-button slot="end" color="dark" (click)="send(data)"><ion-icon name="send"></ion-icon></ion-button>
   </ion-item>
 </ion-footer>

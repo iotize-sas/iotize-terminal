@@ -11,22 +11,23 @@ import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/respo
 })
 export class TerminalService {
 
-  isReading = false;
-  private refreshTime = 1000;
+  readingTaskOn = false;
+  private readingData = false;
+  private refreshTime = 500;
   dataType: 'ASCII' | 'HEX' = 'ASCII';
   endOfLine: Array<string> = [];
 
   constructor(public logger: LoggerService,
-              public deviceService: DeviceService,
-              public settings: SettingsService) {
-              }
+    public deviceService: DeviceService,
+    public settings: SettingsService) {
+  }
 
   async send(data: Uint8Array) {
     try {
       const response = (await this.deviceService.device.service.target.send(data));
       if (response.isSuccess()) {
         if (response.body() === null) {
-          this.logger.log('info', 'sent');
+          this.logger.log('info', 'sent: ');
           return;
         }
       }
@@ -54,17 +55,19 @@ export class TerminalService {
     }
     switch (this.dataType) {
       case 'HEX':
-      data = FormatHelper.hexStringToBuffer(textToSend);
-      break;
+        data = FormatHelper.hexStringToBuffer(textToSend);
+        break;
       case 'ASCII':
-      data = FormatHelper.toByteBuffer(textToSend + suffix);
-      break;
+        data = FormatHelper.toByteBuffer(textToSend + suffix);
+        break;
     }
     console.log(`sending: ${textToSend + suffix}`);
     this.send(data);
   }
 
-  async read() {
+  async readAllTargetData() {
+    console.error('reading ' + Date.now());
+    this.readingData = true;
     try {
       const response = (await this.deviceService.device.service.target.readBytes());
       if (response.isSuccess()) {
@@ -76,7 +79,10 @@ export class TerminalService {
             responseString = FormatHelper.toHexString(response.body());
           }
           this.logger.log('info', responseString);
-                }
+          await this.readAllTargetData();
+        } else {
+          this.readingData = false;
+        }
         return;
       }
       this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
@@ -90,12 +96,14 @@ export class TerminalService {
   }
 
   launchReadingTask() {
-    this.isReading = true;
+    this.readingTaskOn = true;
     console.log('creating reading task observable');
     const timer = interval(this.refreshTime);
-    const reading = timer.subscribe(() => {
-      if (this.isReading) {
-        this.read();
+    const reading = timer.subscribe(async () => {
+      if (this.readingTaskOn) {
+        if (!this.readingData) {
+          await this.readAllTargetData();
+        }
         return;
       }
       console.log('unsubscribing from reading task');
@@ -104,6 +112,6 @@ export class TerminalService {
   }
 
   stopReadingTask() {
-    this.isReading = false;
+    this.readingTaskOn = false;
   }
 }
