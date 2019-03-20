@@ -1,3 +1,5 @@
+Iotize-modbus now has its own repository: [iotize-modbus](https://github.com/iotize-sas/modbus). This branch will not be updated anymore
+
 # IoTize BLE Terminal example app
 
 iotize-terminal is a simple demonstration App showing how to use Iotize Device API in a Cordova based app. 
