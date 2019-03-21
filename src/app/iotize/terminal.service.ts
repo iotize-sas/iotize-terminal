@@ -66,7 +66,7 @@ export class TerminalService {
   }
 
   async readAllTargetData() {
-    console.error('reading ' + Date.now());
+    console.log('reading ' + Date.now());
     this.readingData = true;
     try {
       const response = (await this.deviceService.device.service.target.readBytes());
@@ -97,6 +97,7 @@ export class TerminalService {
 
   launchReadingTask() {
     this.readingTaskOn = true;
+    this.readingData = false;
     console.log('creating reading task observable');
     const timer = interval(this.refreshTime);
     const reading = timer.subscribe(async () => {

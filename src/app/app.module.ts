@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PipeModule } from './pipes/pipes.modules';
+import { NFC } from '@ionic-native/nfc/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { PipeModule } from './pipes/pipes.modules';
   providers: [
     StatusBar,
     SplashScreen,
+    NFC,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

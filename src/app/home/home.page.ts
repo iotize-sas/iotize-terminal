@@ -1,8 +1,9 @@
-import { LoadingController, ToastController, Events } from '@ionic/angular';
+import { LoadingController, ToastController, Events, Platform } from '@ionic/angular';
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { BleService, DiscoveredDeviceType } from './../iotize/ble/ble.service';
 import { Subscription } from 'rxjs';
 import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
+import { NfcService } from '../iotize/nfc/nfc.service';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +16,12 @@ export class HomePage implements OnInit, OnDestroy {
   devices: Array<DiscoveredDeviceType> = [];
 
   constructor(public ble: BleService,
+              public nfc: NfcService,
               public changeDetector: ChangeDetectorRef,
               public loadingCtrl: LoadingController,
               public toastCtrl: ToastController,
-              public events: Events) {}
+              public events: Events,
+              public platform: Platform) {}
 
   ngOnInit(): void {
     this.devicesSubscription = this.ble.devicesObservable()
@@ -34,6 +37,10 @@ export class HomePage implements OnInit, OnDestroy {
     }, (error) => {
       console.error(error);
     });
+    if (this.platform.is('android')) {
+      this.nfc.listenNFC();
+    }
+
     this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
     this.events.subscribe('needChangeDetection', () => this.changeDetector.detectChanges());
   }

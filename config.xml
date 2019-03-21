@@ -84,7 +84,8 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-add-swift-support" spec="^1.7.2" />
     <plugin name="cordova-plugin-iotize-ble" spec="@iotize/cordova-plugin-iotize-ble@~1.1.0-alpha.17" />
+    <plugin name="cordova-plugin-iotize-device-com-nfc" spec="../cordova/device-com-nfc.cordova/" />
     <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="7.1.2" />
     <engine name="windows" spec="7.0.0" />
+    <engine name="android" spec="7.1.4" />
 </widget>
