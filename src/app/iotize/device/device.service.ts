@@ -27,6 +27,7 @@ export class DeviceService {
       console.log('waiting for connection promise');
       await this.connectionPromise;
       this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      console.log(await this.getSerialNumber());
       this.isReady = true;
       this.events.publish('connected');
     } catch (error) {

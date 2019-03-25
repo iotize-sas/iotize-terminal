@@ -22,7 +22,7 @@ export class TabsPage {
     const label = await this.tabs.getSelected();
     console.log(`selected tab : ${label}`);
     if (label === 'terminal' && this.terminal.deviceService.isReady) {
-      this.terminal.launchReadingTask();
+      // this.terminal.launchReadingTask();
     } else {
       this.terminal.stopReadingTask();
     }

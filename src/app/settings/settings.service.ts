@@ -167,6 +167,9 @@ export class SettingsService {
   }
 
   eventSubscribe() {
-    this.events.subscribe('connected', () => this.getUARTSettings());
+    this.events.subscribe('connected', async () => {
+      console.log('getting Settings');
+      await this.getUARTSettings();
+    });
   }
 }

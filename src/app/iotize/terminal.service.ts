@@ -11,6 +11,9 @@ import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/respo
 })
 export class TerminalService {
 
+  readBytesNumber = 0;
+  errorCount = 0;
+
   readingTaskOn = false;
   private readingData = false;
   private refreshTime = 500;
@@ -28,8 +31,8 @@ export class TerminalService {
       if (response.isSuccess()) {
         if (response.body() === null) {
           this.logger.log('info', 'sent: ');
-          return;
         }
+        return;
       }
       this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
     } catch (error) {
@@ -40,7 +43,7 @@ export class TerminalService {
       }
     }
   }
-  sendString(textToSend: string) {
+  async sendString(textToSend: string) {
 
     let data: Uint8Array;
     let suffix = '';
@@ -62,7 +65,11 @@ export class TerminalService {
         break;
     }
     console.log(`sending: ${textToSend + suffix}`);
-    this.send(data);
+    await this.send(data);
+    this.errorCount = 0;
+    this.readBytesNumber = 0;
+    await this.readAllTargetData();
+    this.logger.log('error', `Error count: ${this.errorCount}, total read bytes: ${this.readBytesNumber}`);
   }
 
   async readAllTargetData() {
@@ -71,7 +78,8 @@ export class TerminalService {
     try {
       const response = (await this.deviceService.device.service.target.readBytes());
       if (response.isSuccess()) {
-        if (response.body() !== null) {
+        let responseBody = response.body();
+        if (responseBody instanceof Uint8Array && responseBody.length !== 0) {
           let responseString = '';
           if (this.dataType === 'ASCII') {
             responseString = FormatHelper.toAsciiString(response.body());
@@ -79,38 +87,45 @@ export class TerminalService {
             responseString = FormatHelper.toHexString(response.body());
           }
           this.logger.log('info', responseString);
+          this.readBytesNumber += response.body().length;
           await this.readAllTargetData();
         } else {
           this.readingData = false;
         }
         return;
       }
+
       this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
     } catch (error) {
+      console.error(JSON.stringify(error));
+      console.table(error);
+      this.errorCount++;
       if (error.message) {
         this.logger.log('error', error.message);
       } else {
         this.logger.log('error', error);
       }
+
+      await this.readAllTargetData();
     }
   }
 
-  launchReadingTask() {
-    this.readingTaskOn = true;
-    this.readingData = false;
-    console.log('creating reading task observable');
-    const timer = interval(this.refreshTime);
-    const reading = timer.subscribe(async () => {
-      if (this.readingTaskOn) {
-        if (!this.readingData) {
-          await this.readAllTargetData();
-        }
-        return;
-      }
-      console.log('unsubscribing from reading task');
-      reading.unsubscribe();
-    });
-  }
+  // launchReadingTask() {
+  //   this.readingTaskOn = true;
+  //   this.readingData = false;
+  //   console.log('creating reading task observable');
+  //   const timer = interval(this.refreshTime);
+  //   const reading = timer.subscribe(async () => {
+  //     if (this.readingTaskOn) {
+  //       if (!this.readingData) {
+  //         await this.readAllTargetData();
+  //       }
+  //       return;
+  //     }
+  //     console.log('unsubscribing from reading task');
+  //     reading.unsubscribe();
+  //   });
+  // }
 
   stopReadingTask() {
     this.readingTaskOn = false;

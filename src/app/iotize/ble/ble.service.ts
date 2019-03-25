@@ -96,7 +96,6 @@ export class BleService {
       console.log('trying to connect to ' + deviceAddress);
       await this.deviceService.init(new BLEComProtocol(deviceAddress));
       console.log('connected!');
-      console.log('SN: ' + await this.deviceService.getSerialNumber());
       this.selectedDevice = deviceAddress;
 
     } catch (exception) {

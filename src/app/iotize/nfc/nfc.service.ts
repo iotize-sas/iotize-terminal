@@ -34,10 +34,13 @@ export class NfcService {
 
   async onDiscoveredTap(event) {
     try {
-      console.log('trying to connect to tap');
-      await this.deviceService.init(new NFCComProtocol());
-      console.log('connected!');
-      console.log('SN: ' + await this.deviceService.getSerialNumber());
+      if (!this.deviceService.isReady) {
+        console.warn("NFC Event:");
+        console.warn(event);
+        console.log('trying to connect to tap');
+        await this.deviceService.init(new NFCComProtocol());
+        console.log('connected!');
+      }
     } catch (err) {
       console.error("Can't connect to TAP, try again");
     }
