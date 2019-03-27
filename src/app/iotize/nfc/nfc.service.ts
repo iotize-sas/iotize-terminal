@@ -32,17 +32,32 @@ export class NfcService {
       });
   }
 
-  async onDiscoveredTap(event) {
-    try {
-      if (!this.deviceService.isReady) {
-        console.warn("NFC Event:");
-        console.warn(event);
-        console.log('trying to connect to tap');
-        await this.deviceService.init(new NFCComProtocol());
-        console.log('connected!');
-      }
-    } catch (err) {
-      console.error("Can't connect to TAP, try again");
+  bytesToMacAddress (bytes :number[]) {
+    var dec, hexstring, bytesAsHexString = "";
+    for (var i = bytes.length -1 ; i >= 0 ; i--) {
+        if (bytes[i] >= 0) {
+            dec = bytes[i];
+        } else {
+            dec = 256 + bytes[i];
+        }
+        hexstring = dec.toString(16).toUpperCase();
+        // zero padding
+        if (hexstring.length === 1) {
+            hexstring = "0" + hexstring;
+        }
+        if (i!=(bytes.length -1)){
+          bytesAsHexString += ":"
+        }
+        bytesAsHexString += hexstring;
     }
+    return bytesAsHexString;
+  }
+
+  async onDiscoveredTap(nfcEvent) {
+   
+    var tag = nfcEvent.tag,
+    ndefMessage = tag.ndefMessage;
+    var macaddress = this.bytesToMacAddress(ndefMessage[2].payload.slice(1));
+    await this.deviceService.NFCLoginAndBLEPairing(macaddress);      
   }
 }
