@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeviceService } from '../device/device.service';
-import { NFCComProtocol } from '../../../../plugins/cordova-plugin-iotize-device-com-nfc/src/www';
+import { NFCComProtocol } from '@iotize/device-com-nfc.cordova';
 import { NFC } from "@ionic-native/nfc/ngx";
 
 @Injectable({

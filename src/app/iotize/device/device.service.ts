@@ -4,7 +4,7 @@ import { ComProtocol } from '@iotize/device-client.js/protocol/api';
 import { Events } from '@ionic/angular';
 import { BLEComProtocol } from '@iotize/cordova-plugin-iotize-ble';
 import { Tap, SessionState } from "@iotize/device-client.js/device";
-import { NFCComProtocol } from '../../../../plugins/cordova-plugin-iotize-device-com-nfc/src/www';
+import { NFCComProtocol } from '@iotize/device-com-nfc.cordova';
 
 
 @Injectable({
