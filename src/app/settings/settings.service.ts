@@ -3,7 +3,7 @@ import { LoggerService } from './../iotize/logger.service';
 import { Injectable } from '@angular/core';
 import { UartSettings } from '@iotize/device-client.js/device/model';
 import { Events } from '@ionic/angular';
-import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
+import { ResultCodeTranslation, ResultCode } from '@iotize/device-client.js/client/api/response';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +43,9 @@ export class SettingsService {
         this._settings = response.body();
         this.settings = Object.assign({}, this._settings);
         return;
+      }
+      if (response.codeRet() === ResultCode.IOTIZE_401_UNAUTHORIZED) {
+        throw new Error('Login required');
       }
       throw new Error('getUARTSettings response failed: ' + ResultCodeTranslation[response.codeRet()]);
 
@@ -167,6 +170,6 @@ export class SettingsService {
   }
 
   eventSubscribe() {
-    this.events.subscribe('connected', () => this.getUARTSettings());
+    this.events.subscribe('connected', () => this.getUARTSettings().catch(error => this.events.publish('error-message', error.message)));
   }
 }

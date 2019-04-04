@@ -36,6 +36,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
     this.events.subscribe('disconnected', () => this.changeDetector.detectChanges());
     this.events.subscribe('needChangeDetection', () => this.changeDetector.detectChanges());
+    this.events.subscribe('error-message', message => this.showToast(message));
   }
 
   async connect(device: DiscoveredDeviceType) {

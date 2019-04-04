@@ -3,7 +3,8 @@ import { SettingsService } from './../settings/settings.service';
 import { DeviceService } from './device/device.service';
 import { LoggerService } from './logger.service';
 import { Injectable } from '@angular/core';
-import { interval } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
 
 @Injectable({
@@ -16,6 +17,8 @@ export class TerminalService {
   private refreshTime = 500;
   dataType: 'ASCII' | 'HEX' = 'ASCII';
   endOfLine: Array<string> = [];
+  timer: Observable<number> = null;
+  readingTaskSubscription: Subscription = null;
 
   constructor(public logger: LoggerService,
     public deviceService: DeviceService,
@@ -71,12 +74,13 @@ export class TerminalService {
     try {
       const response = (await this.deviceService.device.service.target.readBytes());
       if (response.isSuccess()) {
-        if (response.body() !== null) {
+        let responseBody = response.body();
+        if (responseBody.byteLength > 0) {
           let responseString = '';
           if (this.dataType === 'ASCII') {
-            responseString = FormatHelper.toAsciiString(response.body());
+            responseString = FormatHelper.toAsciiString(responseBody);
           } else if (this.dataType === 'HEX') {
-            responseString = FormatHelper.toHexString(response.body());
+            responseString = FormatHelper.toHexString(responseBody);
           }
           this.logger.log('info', responseString);
           await this.readAllTargetData();
@@ -100,21 +104,16 @@ export class TerminalService {
   launchReadingTask() {
     this.readingTaskOn = true;
     console.log('creating reading task observable');
-    const timer = interval(this.refreshTime);
-    const reading = timer.subscribe(() => {
-      if (this.readingTaskOn) {
-        if (!this.readingData) {
-          this.readAllTargetData();
-        }
-        return;
+    this.timer = interval(this.refreshTime).pipe(takeWhile(() => this.readingTaskOn));
+    this.readingTaskSubscription = this.timer.subscribe(() => {
+      if (!this.readingData) {
+        this.readAllTargetData();
       }
-      console.log('unsubscribing from reading task');
-      reading.unsubscribe();
-    });
+    }, _ => console.error(_),
+    () => console.log('Timer completed'));
   }
 
   stopReadingTask() {
-    console.info('stopping reading task');
     this.readingTaskOn = false;
   }
 }
