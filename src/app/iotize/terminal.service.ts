@@ -30,8 +30,9 @@ export class TerminalService {
           this.logger.log('info', 'sent: ');
           return;
         }
+      } else {
+        this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
       }
-      this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
     } catch (error) {
       if (error.message) {
         this.logger.log('error', error.message);
@@ -66,7 +67,6 @@ export class TerminalService {
   }
 
   async readAllTargetData() {
-    console.error('reading ' + Date.now());
     this.readingData = true;
     try {
       const response = (await this.deviceService.device.service.target.readBytes());
@@ -84,9 +84,11 @@ export class TerminalService {
           this.readingData = false;
         }
         return;
+      } else {
+        this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
       }
-      this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
     } catch (error) {
+      this.readingData = false;
       if (error.message) {
         this.logger.log('error', error.message);
       } else {
@@ -99,10 +101,10 @@ export class TerminalService {
     this.readingTaskOn = true;
     console.log('creating reading task observable');
     const timer = interval(this.refreshTime);
-    const reading = timer.subscribe(async () => {
+    const reading = timer.subscribe(() => {
       if (this.readingTaskOn) {
         if (!this.readingData) {
-          await this.readAllTargetData();
+          this.readAllTargetData();
         }
         return;
       }
@@ -112,6 +114,7 @@ export class TerminalService {
   }
 
   stopReadingTask() {
+    console.info('stopping reading task');
     this.readingTaskOn = false;
   }
 }

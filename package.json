@@ -27,10 +27,10 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^4.1.0",
     "@iotize/cordova-plugin-iotize-ble": "^1.1.0-alpha.20",
-    "@iotize/device-client.js": "0.0.1-alpha.74",
+    "@iotize/device-client.js": "0.0.1-alpha.78",
     "cordova-android": "7.1.2",
-    "cordova-ios": "4.5.5",
-    "cordova-plugin-add-swift-support": "^1.7.2",
+    "cordova-ios": "5.0.0",
+    "cordova-plugin-add-swift-support": "^2.0.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^2.3.2",
@@ -41,7 +41,8 @@
     "core-js": "^2.5.4",
     "os": "^0.1.1",
     "rxjs": "~6.3.3",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.8.29",
+    "cordova-plugin-iotize-ble": "@iotize/cordova-plugin-iotize-ble@~1.1.0-alpha.20"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.12.3",
@@ -80,13 +81,13 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-add-swift-support": {},
-      "cordova-plugin-iotize-ble": {}
+      "cordova-plugin-iotize-ble": {},
+      "cordova-plugin-add-swift-support": {}
     },
     "platforms": [
-      "ios",
       "android",
-      "windows"
+      "windows",
+      "ios"
     ]
   }
 }
