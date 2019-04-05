@@ -66,6 +66,9 @@ export class DeviceService {
       console.log('trying to log as ', this.username);
       const logSuccess = await this.device.login(this.username, this.password);
       this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      if (logSuccess) {
+        this.events.publish('logged-in');
+      }
       return logSuccess;
     } catch (error) {
       throw error;

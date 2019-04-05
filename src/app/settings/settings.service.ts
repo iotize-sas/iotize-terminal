@@ -15,6 +15,7 @@ export class SettingsService {
 
   _settings: UartSettings; // real settings
   settings: UartSettings; // displayed settings
+  didFetchSettings = false;
 
   constructor(public logger: LoggerService,
     public deviceService: DeviceService,
@@ -42,10 +43,12 @@ export class SettingsService {
       if (response.isSuccess()) {
         this._settings = response.body();
         this.settings = Object.assign({}, this._settings);
+        this.didFetchSettings = true;
         return;
       }
       if (response.codeRet() === ResultCode.IOTIZE_401_UNAUTHORIZED) {
         throw new Error('Login required');
+        this.didFetchSettings = false;
       }
       throw new Error('getUARTSettings response failed: ' + ResultCodeTranslation[response.codeRet()]);
 
@@ -171,5 +174,10 @@ export class SettingsService {
 
   eventSubscribe() {
     this.events.subscribe('connected', () => this.getUARTSettings().catch(error => this.events.publish('error-message', error.message)));
+    this.events.subscribe('logged-in', () => {
+      if (!this.didFetchSettings) {
+        this.getUARTSettings().catch(error => this.events.publish('error-message', error.message))
+      }
+    });
   }
 }

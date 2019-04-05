@@ -29,7 +29,7 @@ export class TerminalService {
     try {
       const response = (await this.deviceService.device.service.target.send(data));
       if (response.isSuccess()) {
-        if (response.body() === null) {
+        if (response.body().byteLength === 0) {
           this.logger.log('info', 'sent: ');
           return;
         }
