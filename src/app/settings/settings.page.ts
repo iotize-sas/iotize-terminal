@@ -135,14 +135,12 @@ export class SettingsPage {
         {
           name: 'username',
           type: 'text',
-          placeholder: 'Username',
-          value: this.settings.deviceService.username
+          placeholder: 'Username'
         },
         {
           name: 'password',
           type: 'password',
-          placeholder: 'Password',
-          value: this.settings.deviceService.password
+          placeholder: 'Password'
         }
       ],
       buttons: [
@@ -155,9 +153,9 @@ export class SettingsPage {
           text: 'Ok',
           handler: async (data) => {
             alert.dismiss();
-            this.settings.deviceService.username = data['username'];
-            this.settings.deviceService.password = data['password'];
-            await this.login();
+            const username = data['username'];
+            const password = data['password'];
+            await this.login(username, password);
             this.changeDetector.detectChanges();
           }
         }
@@ -166,15 +164,15 @@ export class SettingsPage {
     alert.present();
   }
 
-  async login() {
+  async login(username: string, password: string) {
     const loader = await this.loadingCtrl.create({ message: 'Logging in' });
     loader.present();
 
     try {
-      const logSuccess = await this.terminal.deviceService.login();
+      const logSuccess = await this.terminal.deviceService.login(username, password);
       loader.dismiss();
       if (logSuccess) {
-        this.showToast(`Logged in as ${this.settings.deviceService.username}`);
+        this.showToast(`Logged in as ${username}`);
       } else {
         this.showToast(`Wrong username or password`);
       }

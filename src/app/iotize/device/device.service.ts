@@ -11,8 +11,6 @@ export class DeviceService {
   isReady = false;
   device: IoTizeDevice;
   connectionPromise = null;
-  username = '';
-  password = '';
   session?: SessionState = null;
 
   get isLogged(): boolean {
@@ -69,10 +67,10 @@ export class DeviceService {
     this.device = null;
   }
 
-  async login(): Promise<boolean> {
+  async login(user: string, password: string): Promise<boolean> {
     try {
-      console.log('trying to log as ', this.username);
-      const logSuccess = await this.device.login(this.username, this.password);
+      console.log('trying to log as ', user);
+      const logSuccess = await this.device.login(user, password);
       if (logSuccess) {
         await this.checkSessionState();
       }
@@ -95,7 +93,7 @@ export class DeviceService {
       return false;
     }
   }
-  
+
   async checkSessionState() {
     if (!this.device.isConnected()) {
       this.session = null;
