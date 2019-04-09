@@ -4,20 +4,28 @@
       Settings
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="terminal.deviceService.connectedId === 0" (click)="openLoginAlert()">
+      <ion-button *ngIf="!terminal.deviceService.isLogged" (click)="openLoginAlert()">
         <ion-icon slot="end" name="log-in"></ion-icon>
         Login
       </ion-button>
-      <ion-button *ngIf="terminal.deviceService.connectedId !== 0" (click)="openLogoutAlert()">
+      <ion-button *ngIf="terminal.deviceService.isLogged" (click)="openLogoutAlert()">
         <ion-icon slot="end" name="log-out"></ion-icon>
         Logout
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
   <ion-list>
+    <ion-list-header>
+      <ion-label>
+        User informations
+      </ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Name</ion-label>
+      <span *ngIf="terminal.deviceService.session">{{terminal.deviceService.session.name}}</span>
+    </ion-item>
     <ion-list-header>
       <ion-label>
         Communication settings

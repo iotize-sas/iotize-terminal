@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IoTizeDevice } from '@iotize/device-client.js/device';
+import { IoTizeDevice, SessionState } from '@iotize/device-client.js/device';
 import { ComProtocol } from '@iotize/device-client.js/protocol/api';
 import { Events } from '@ionic/angular';
 
@@ -11,9 +11,16 @@ export class DeviceService {
   isReady = false;
   device: IoTizeDevice;
   connectionPromise = null;
-  connectedId = 0;
   username = '';
   password = '';
+  session?: SessionState = null;
+
+  get isLogged(): boolean {
+    if (this.session) {
+      return this.session.name !== 'anonymous';
+    }
+    return false;
+  }
 
   constructor(public events: Events) { }
   // constructor(public settings: SettingsService) { }
@@ -26,7 +33,7 @@ export class DeviceService {
       this.connectionPromise = this.connect(protocol);
       console.log('waiting for connection promise');
       await this.connectionPromise;
-      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      await this.checkSessionState();
       this.isReady = true;
       this.events.publish('connected');
     } catch (error) {
@@ -44,6 +51,7 @@ export class DeviceService {
     try {
       this.isReady = false;
       await this.device.disconnect();
+      await this.checkSessionState();
       this.events.publish('disconnected');
     } catch (error) {
       console.log(error);
@@ -65,9 +73,8 @@ export class DeviceService {
     try {
       console.log('trying to log as ', this.username);
       const logSuccess = await this.device.login(this.username, this.password);
-      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
       if (logSuccess) {
-        this.events.publish('logged-in');
+        await this.checkSessionState();
       }
       return logSuccess;
     } catch (error) {
@@ -82,10 +89,26 @@ export class DeviceService {
       return false;
     }
     try {
-      this.connectedId = (await this.device.service.interface.getCurrentProfileId()).body();
+      await this.checkSessionState();
       return true;
     } catch (error) {
       return false;
     }
+  }
+  
+  async checkSessionState() {
+    if (!this.device.isConnected()) {
+      this.session = null;
+      return;
+    }
+    const previouslyConnectedProfile = this.session? this.session.name : '';
+    this.session = await this.device.refreshSessionState();
+    if (previouslyConnectedProfile !== ''){ // not the first sessionState
+      if (this.session.name === 'anonymous') {
+        this.events.publish('logged-out');
+      } else if (previouslyConnectedProfile !== this.session.name){
+        this.events.publish('logged-in', this.session.name);
+      }
+    } 
   }
 }
