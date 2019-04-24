@@ -5,7 +5,7 @@ import { LoggerService } from './logger.service';
 import { Injectable } from '@angular/core';
 import { interval, Observable, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { ResultCodeTranslation } from '@iotize/device-client.js/client/api/response';
+import { ResultCodeTranslation, ResultCode, Response } from '@iotize/device-client.js/client/api/response';
 
 @Injectable({
   providedIn: 'root'
@@ -31,10 +31,11 @@ export class TerminalService {
       if (response.isSuccess()) {
         if (response.body().byteLength === 0) {
           this.logger.log('info', 'sent: ');
+          await this.readAllTargetData();
           return;
         }
       } else {
-        this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
+        this.handleIoTizeErrors(response);
       }
     } catch (error) {
       if (error.message) {
@@ -109,11 +110,22 @@ export class TerminalService {
       if (!this.readingData) {
         this.readAllTargetData();
       }
-    }, _ => console.error(_),
+    }, err => console.error(err),
     () => console.log('Timer completed'));
   }
 
   stopReadingTask() {
     this.readingTaskOn = false;
+  }
+
+  async handleIoTizeErrors(response: Response<any>) {
+    switch (response.codeRet()) {
+      case ResultCode.IOTIZE_401_UNAUTHORIZED:
+        await this.deviceService.checkSessionState();
+        this.logger.log('error', `${this.deviceService.session.name} is not authorized`);
+        break;
+      default:
+      this.logger.log('error', `Device responded ${ResultCodeTranslation[response.codeRet()]}`);
+    }
   }
 }
