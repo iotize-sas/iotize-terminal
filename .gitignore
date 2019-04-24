@@ -32,3 +32,5 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+release-manager-key.json
+release-signing.properties

@@ -1,0 +1,3 @@
+Proper display of the terminal page.
+Fixed wrong settings behavior.
+Improved data fetching
