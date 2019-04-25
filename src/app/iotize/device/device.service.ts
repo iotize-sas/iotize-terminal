@@ -70,7 +70,7 @@ export class DeviceService {
   async login(user: string, password: string): Promise<boolean> {
     try {
       console.log('trying to log as ', user);
-      const logSuccess = await this.device.login(user, password);
+      const logSuccess = await this.device.login(user, password, false);
       if (logSuccess) {
         await this.checkSessionState();
       }

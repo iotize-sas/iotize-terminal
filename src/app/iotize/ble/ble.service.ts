@@ -59,6 +59,7 @@ export class BleService {
   checkAvailable(): Promise<void> {
     return new Promise((resolve, reject) => {
       iotizeBLE.checkAvailable((val) => {
+        console.log(val);
         val ? resolve() : reject('BlueTooth is not on and ready to use');
         },
       (err) => {
@@ -128,11 +129,11 @@ export class BleService {
 
   async disconnect() {
     try {
+      this.selectedDevice = '';
       await this.deviceService.disconnect();
     } catch (error) {
       console.error(error);
       throw error;
     }
-    this.selectedDevice = '';
   }
 }
